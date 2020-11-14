@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DevThis\Binder;
+namespace DevThis\ConsoleLogg\Binder;
 
 use DevThis\ConsoleLogg\Console\FilterableConsoleLogger;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
