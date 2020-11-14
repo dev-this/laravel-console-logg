@@ -27,6 +27,7 @@ jobs:
         run: |
           composer require "illuminate/contracts=^8.0" --no-update
           composer update --prefer-dist --no-interaction --no-progress
+          ls -lha
 
       - name: Execute tests
         run: vendor/bin/phpunit --coverage-clover coverage.xml
