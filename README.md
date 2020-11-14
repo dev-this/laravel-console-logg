@@ -1,35 +1,26 @@
 # Laravel ConsoleLogg
+[![Latest Stable Version](https://poser.pugx.org/devthis/console-logg/v)](//packagist.org/packages/devthis/console-logg)
+[![codecov](https://codecov.io/gh/dev-this/laravel-console-logg/branch/master/graph/badge.svg)](https://codecov.io/gh/dev-this/laravel-console-logg)
+[![Total Downloads](https://poser.pugx.org/devthis/console-logg/downloads)](//packagist.org/packages/devthis/console-logg)
+[![License](https://poser.pugx.org/devthis/console-logg/license)](//packagist.org/packages/devthis/console-logg)
 
-Effortless PSR-3 Logger output to your console applications. Powered
-by [Symfony's Console Logger](https://symfony.com/doc/current/components/console/logger.html)
-
-Allows your to use the Log facade, or PSR-3 LogInterface throughout your application, and have the output rendered to
-console applications.
-
-| Laravel | Compatible out of the box |
-| ------- | :-----------------------------------------------------------------------: |
-| 8.x     | Yes |
-| 7.x     | Yes |
-| 6.x     | Yes |
-| 5.8.*   | Not yet |
-| 5.7.*   | Not yet |
-| 5.6.*   | Not yet |
+#### Effortless PSR-3 Logger output to your console applications
+Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components/console/logger.html)
 
 ## Table of contents
 
-- [Usage](#usage)
-    - [Example](#channels)
-- [Configuration](#available-methods)
-- [Extending](#channels)
+- [Install](#Install)
+- [Features](#available-methods)
+- [Example](#Example)
 - [License](#license)
 
-## Why?
+# What does it do?
 
-Because your application shouldn't be coupled to a concrete class explicitly for console logging.
+This pacakge allows you to send output to a console application using the built-in Laravel Logger (PSR-3 Interface, or Log facade).
 
-This allows your API/workers/console to have the same logging interface, and messages
+Once installed it works out of the box with zero configuration.
 
-## Usage
+## Install
 
 1. Install the package via Composer:
 
@@ -40,15 +31,101 @@ This allows your API/workers/console to have the same logging interface, and mes
    php artisan vendor:publish --provider="DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider"
     ```
 
-2. Add some `Log::info('Informative logs');` throughout your application
+# Features
 
-### Example
+## Zero configuration
+Providing you've run `composer require` without `--no-scripts`, the only dependency (provider) will be automatically installed.
+
+Otherwise you can manually add the provider
+
+## Efficient
+- No memory leaks
+  - One time use console logger is attached & detached as required
+  - All references destroyed after command termination (letting PHP Garbage Collector to do its thing)
+- Service Provider ensures nothing is initialized when using non-CLI mode 
+
+## Verbosity
+- Respects the default built-in Symfony verbosity mappings
+
+| Verbosity | Column header 2 |
+| ---------------|----------------|
+| -v | `emergency`, `alert`, `critical`, `error`, `warning`|
+| -vv |`notice` + all of above |
+| -vvv | `info` + all of above |
+
+`debug` level logs will only be present when `APP_DEBUG=1`
+
+## Works with command-in-command
+
+ConsoleLogg has been tested & is compatible with [nested command calls](https://laravel.com/docs/8.x/artisan#calling-commands-from-other-commands
+)
 
 ## Configuration
 
-## Extending
+See [config/console-logg.php](config/console-logg.php).
 
-## License
+# Example
+Example Service
+
+```php
+namespace App\Service;
+
+use Illuminate\Support\Facades\Log;
+use Psr\Log\LoggerInterface;
+
+class MyExampleService {
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+    
+    public function doSomethingCool(): void
+    {
+        $this->logger->debug("A message that may be meaningful to a console app using this service");
+        
+        Log::info("or just the facade if you love magic");
+        
+        // ...
+    }
+}
+```
+
+Example Console Application
+```php
+namespace App\Console\Commands;
+
+use App\Service\ExampleService;
+use Illuminate\Console\Command;
+
+class ExampleConsole extends Command
+{
+    /**
+     * The console command description.
+     */
+    protected $description = '';
+
+    /**
+     * The name and signature of the console command.
+     */
+    protected $signature = 'something';
+
+    public function handle(ExampleService $exampleService): int
+    {
+        $exampleService->doSomethingCool();
+
+        return 0;
+    }
+}
+
+```
+
+Running the console
+```bash
+mitchell@mitchell-linux:~/MyProject$ php artisan something
+[debug] A message that may be meaningful to a console app using this service
+[info] or just the facade if you love magic
+```
 
 ## License
 

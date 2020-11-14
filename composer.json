@@ -1,6 +1,6 @@
 {
     "name": "devthis/console-logg",
-    "description": "Standard Laravel logger output for console applications",
+    "description": "Effortless non-custom PSR-3/Log Facade to your console applications",
     "keywords": [
         "laravel",
         "symfony",
@@ -33,5 +33,13 @@
         "psr-4": {
             "DevThis\\ConsoleLogg\\": "src/"
         }
+    },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
     }
 }
