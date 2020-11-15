@@ -199,6 +199,10 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
+    public function routesAreCached()
+    {
+    }
+
     public function runningInConsole()
     {
     }
