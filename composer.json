@@ -1,37 +1,48 @@
 {
-    "name": "devthis/console-logg",
-    "description": "Standard Laravel logger output for console applications",
-    "keywords": [
-        "laravel",
-        "symfony",
-        "console",
-        "psr3",
-        "logger",
-        "channels"
-    ],
-    "authors": [
-        {
-            "name": "Mitchell Macphrson",
-            "email": "mitchell@devthis.com.au"
-        }
-    ],
-    "license": "MIT",
-    "require": {
-        "php": "^7.1.3",
-        "illuminate/log": ">=6.0",
-        "illuminate/console": ">=6.0",
-        "illuminate/support": ">=6.0"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "DevThis\\ConsoleLogg\\Providers\\ConsoleLoggServiceProvider"
-            ]
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "DevThis\\ConsoleLogg\\": "src/"
-        }
+  "name": "devthis/console-logg",
+  "description": "Effortless artisan console output with your usual Laravel logger",
+  "keywords": [
+    "laravel",
+    "symfony",
+    "console",
+    "logg",
+    "consolelogg",
+    "psr3",
+    "psr-3",
+    "logger",
+    "channels"
+  ],
+  "authors": [
+    {
+      "name": "Mitchell Macphrson",
+      "email": "mitchell@devthis.com.au"
     }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": "7.1.3 - 8.0",
+    "illuminate/log": ">=6.0",
+    "illuminate/console": ">=6.0",
+    "illuminate/support": ">=6.0"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "DevThis\\ConsoleLogg\\Providers\\ConsoleLoggServiceProvider"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "DevThis\\ConsoleLogg\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0"
+  }
 }

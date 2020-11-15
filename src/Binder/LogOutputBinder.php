@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace DevThis\ConsoleLogg\Binder;
 
-use DevThis\ConsoleLogg\Console\FilterableConsoleLogger;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
+use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
 use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
 
+/**
+ * Responsible for binding a ConsoleLogger instance with the built-in Laravel Logger, and removing
+ *
+ * @todo nested artisan command call compatibility
+ */
 class LogOutputBinder implements LogOutputBindedInterface
 {
+    /**
+     * @var FilterableConsoleLoggerFactoryInterface
+     */
+    private $consoleLoggerFactory;
+
     /**
      * @var string|null
      */
@@ -23,9 +33,10 @@ class LogOutputBinder implements LogOutputBindedInterface
      */
     private $isFiltered;
 
-    public function __construct(Repository $config)
+    public function __construct(FilterableConsoleLoggerFactoryInterface $consoleLoggerFactory, Repository $config)
     {
         $this->isFiltered = $config->get('console-logg.filtered') === true;
+        $this->consoleLoggerFactory = $consoleLoggerFactory;
     }
 
     public function attach(CommandStarting $commandEvent, LogManager $logManager): void
@@ -33,8 +44,7 @@ class LogOutputBinder implements LogOutputBindedInterface
         $this->defaultDriver = $logManager->getDefaultDriver();
         $logManager->setDefaultDriver('console-logg');
 
-        $consoleLogger = (new FilterableConsoleLogger($commandEvent->output))
-            ->setFiltered($this->isFiltered);
+        $consoleLogger = $this->consoleLoggerFactory->create($commandEvent->output, $this->isFiltered);
 
         $logManager->extend(
             'console-logg',
