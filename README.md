@@ -33,14 +33,24 @@ Laravel logger**
 Typically, this requires a hacky solution, such as coupling your shared services with a console logger, or configuring
 multiple driver channels.
 
-tl;dr: Installing this package & using `logger()->critical("Message")`
-or `Log::critical("Something horrible has happened")` in your shared service code, will:
+With ConsoleLogg you can have logs for your artisan commands, and behave as usual with http/controllers.
 
-- Yield `[critical] Something horrible has happened` when service is run in your artisan command
-- or, log as per usual when used in your web environment
+**Use your Laravel logger throughout your application shared services as usual**
 
-It works out of the box with zero configuration.
+- _Dependency Injection/autowiring_ `LoggerInterface $logger` & `$logger->debug("yeet")`
+- `logger()->critical("Send help")`
+- `Log::alert("She find pictures in my email")`
+- `Log::info("Found <X> to be processed")`
 
+```
+php artisan my:command -vvv
+[debug] yeet
+[critical] Send help
+[alert] She find pictures in my email
+[info] Found <X> to be processed
+```
+
+---
 ## Install
 
 1. Install the package via Composer:
@@ -61,6 +71,8 @@ It works out of the box with zero configuration.
 | :heavy_check_mark: | 6.*       | PHP >=7.1 |
 | :heavy_exclamation_mark: :soon: | > 5.6     | PHP >=7.1 |
 
+**PHP 8 compatibility is currently being tested**
+
 #### Compatibility assurance
 
 <details>
@@ -80,16 +92,14 @@ Unit tests ensure type-compatibility, expected behaviour is met & compatibility 
 
 </details>
 
+---
 # Features
 
 ## Works out of the box
 
 There are no traits, classes, interfaces that you need to use. ConsoleLogg does not require any custom code for usage.
 
-It just works with your application using the logger in the typical ways
-
-- [x] Autowiring DI (eg. LogInterface, LogManager, Logger)
-- [x] Log Facade
+There are some [configurable properties](#configurable), but they are optional.
 
 ## Zero config
 
@@ -111,11 +121,11 @@ See [config/console-logg.php](config/console-logg.php) for the raw configuration
 
 ### Filtering
 
-@todo
+_Documentation to come_
 
-### Extending
+### Extend
 
-@todo
+_Documentation to come_
 
 ## Command-in-command
 
@@ -144,6 +154,7 @@ class MyConsoleApp extends Command
 }
 ```
 
+---
 # Light footprint
 
 - **Zero external dependencies** outside of Laravel contracts
@@ -153,27 +164,50 @@ class MyConsoleApp extends Command
     - All references destroyed after command termination _(letting PHP Garbage Collection do its thing)_
 - Service Provider lazily works only when running in console mode
 
+---
 # Usage
 
 ## Verbosity
 
-Support is present for the default built-in `LOG_LEVEL` configuration
+Verbosity is optionally controlled by either using `-v` arguments when running artisan.
 
-| Verbosity | Column header 2 |
+This is not behaviour set by ConsoleLogg, it is defined in combination of [Laravel](https://github.com/laravel/framework/blob/8.x/src/Illuminate/Console/Concerns/InteractsWithIO.php#L43) & [Symfony](https://github.com/symfony/console/blob/5.x/Logger/ConsoleLogger.php#L33)
+
+_ConsoleLogg may provide configuration  for this in the future, if demand is apparent_
+
+| Verbosity | Level |
 | ---------------|----------------|
-| -v | `emergency`, `alert`, `critical`, `error`, `warning`|
-| -vv |`notice` + all of above |
-| -vvv | `info` + all of above |
+| _default_ | `emergency`, `alert`, `critical`, `error`, `warning`|
+| -v | `notice` + all of above |
+| -vv |`info` + all of above |
+| -vvv | `debug` + all of above |
 
-`debug` level logs will only be present when `APP_DEBUG=1` & `-vvv` is used
+# Examples
 
-## Code example
+### Running artisan
+<details>
+  <summary>View example usage</summary>
+
+## Example #1 - SQL query logging
+
+There are several guides/answers on the internet that enable you to send all SQL queries to your configured Logger.
+
+With ConsoleLogg installed this means 
+
+Links (in no order):
+- [Code Briefly - Seeing all SQL queries executed with your artisan command](https://codebriefly.com/how-to-log-all-sql-queries-in-laravel/)
+- [StackOverflow - Laravel 5.3 - How to log all queries on a page?](https://stackoverflow.com/a/43137632)
+- [Larvel Tricks - Real-time log of Eloquent SQL queries](https://laravel-tricks.com/tricks/real-time-log-of-eloquent-sql-queries)
+
+## Example #2 - Raw code
 
 > :warning: **REMINDER:** n-o-t-h-i-n-g is special about this following code example
 >
 > There are no traits, interfaces, or classes/dependencies that are involved to use ConsoleLogg once it's installed.
 
-**Example Service**
+### Souce code for example service
+<details>
+  <summary>Source of App\Service\MyExampleService</summary>
 
 ```php
 namespace App\Service;
@@ -203,9 +237,12 @@ class MyExampleService {
     }
 }
 ```
+</details>
 
-Example Console Application
-
+### Source code for Console Application
+<details>
+  <summary>Source of App\Console\Commands\ExampleConsole</summary>
+    
 ```php
 namespace App\Console\Commands;
 
@@ -233,8 +270,11 @@ class ExampleConsole extends Command
 }
 
 ```
+</details>
 
-Running the console
+### Running artisan
+<details>
+  <summary>Artisan command output</summary>
 
 ```bash
 not-root@linux:~/MyProject$ php artisan something -vv
@@ -243,6 +283,11 @@ not-root@linux:~/MyProject$ php artisan something -vv
 [notice] or this weird helper function I guess
 ```
 
-## License
+</details>
+</details>
+
+
+---
+# License
 
 Laravel ConsoleLogg is open-sourced software licensed under the [MIT license](LICENSE.md).
