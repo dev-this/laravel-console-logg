@@ -1,8 +1,9 @@
 # Laravel ConsoleLogg
-[![Latest Stable Version](https://poser.pugx.org/devthis/console-logg/v)](//packagist.org/packages/devthis/console-logg)
+[![Latest Stable Version](https://poser.pugx.org/devthis/console-logg/v)](https://packagist.org/packages/devthis/console-logg)
 [![codecov](https://codecov.io/gh/dev-this/laravel-console-logg/branch/master/graph/badge.svg)](https://codecov.io/gh/dev-this/laravel-console-logg)
-[![Total Downloads](https://poser.pugx.org/devthis/console-logg/downloads)](//packagist.org/packages/devthis/console-logg)
-[![License](https://poser.pugx.org/devthis/console-logg/license)](//packagist.org/packages/devthis/console-logg)
+[![Total Downloads](https://poser.pugx.org/devthis/console-logg/downloads)](https://packagist.org/packages/devthis/console-logg)
+[![License](https://poser.pugx.org/devthis/console-logg/license)](https://packagist.org/packages/devthis/console-logg)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B21424%2Fgit%40github.com%3Adev-this%2Flaravel-console-logg.git.svg?type=shield)](https://app.fossa.com/projects/custom%2B21424%2Fgit%40github.com%3Adev-this%2Flaravel-console-logg.git?ref=badge_shield)
 
 #### Effortless PSR-3 Logger output to your console applications
 Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components/console/logger.html)
@@ -18,7 +19,7 @@ Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components
 
 This pacakge allows you to send output to a console application using the built-in Laravel Logger (PSR-3 Interface, or Log facade).
 
-Once installed it works out of the box with zero configuration.
+It works out of the box with zero configuration.
 
 ## Install
 
