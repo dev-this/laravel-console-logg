@@ -9,7 +9,7 @@ use DevThis\ConsoleLogg\Factories\FilterableConsoleLoggerFactory;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
 use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
 use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
-use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
+use DevThis\ConsoleLogg\Listeners\LoggerResolveListener;
 use DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -56,7 +56,7 @@ class ConsoleLoggServiceProviderTest extends TestCase
         $serviceProvider->register();
 
         self::assertSame(LogOutputBinder::class, $app->get(LogOutputBindedInterface::class));
-        self::assertSame(LogManagerResolverListener::class, $app->get(LogManagerResolverListenerInterface::class));
+        self::assertSame(LoggerResolveListener::class, $app->get(LogManagerResolverListenerInterface::class));
         self::assertSame(
             FilterableConsoleLoggerFactory::class,
             $app->get(FilterableConsoleLoggerFactoryInterface::class)
@@ -71,7 +71,7 @@ class ConsoleLoggServiceProviderTest extends TestCase
         $serviceProvider->register();
 
         self::assertNotSame(LogOutputBinder::class, $app->get(LogOutputBindedInterface::class));
-        self::assertNotSame(LogManagerResolverListener::class, $app->get(LogManagerResolverListenerInterface::class));
+        self::assertNotSame(LoggerResolveListener::class, $app->get(LogManagerResolverListenerInterface::class));
         self::assertNotSame(
             FilterableConsoleLoggerFactory::class,
             $app->get(FilterableConsoleLoggerFactoryInterface::class)

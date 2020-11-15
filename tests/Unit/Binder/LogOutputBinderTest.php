@@ -23,22 +23,30 @@ class LogOutputBinderTest extends TestCase
 {
     public function testAttachSetsDefaultDriver(): void
     {
+        if (class_exists(LogManager::class) === false) {
+            self::markTestSkipped('Incompatible with current version of dependencies');
+        }
+
         $config = new RepositoryStub();
         $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
         $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
         $stringInput = new StringInput('some:command');
         $commandStarting = new CommandStarting('Some\Command', $stringInput, new NullOutput());
         $app = new ApplicationFake(['config' => ['logging.default' => ['driver' => 'the-default']]]);
-        $logManager = new LogManager($app);
+        $logger = new LogManager($app);
         $expectation = 'console-logg';
 
-        $logOutputBinder->attach($commandStarting, $logManager);
+        $logOutputBinder->attach($commandStarting, $logger);
 
-        self::assertSame($expectation, $logManager->getDefaultDriver());
+        self::assertSame($expectation, $logger->getDefaultDriver());
     }
 
     public function testAttachedConsoleLoggerRespectsFilteredOption(): void
     {
+        if (class_exists(LogManager::class) === false) {
+            self::markTestSkipped('Incompatible with current version of dependencies');
+        }
+
         $config = new RepositoryStub();
         $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
         $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
@@ -59,6 +67,10 @@ class LogOutputBinderTest extends TestCase
 
     public function testDefaultDriverAfterDetachIsNotConsoleLogg(): void
     {
+        if (class_exists(LogManager::class) === false) {
+            self::markTestSkipped('Incompatible with current version of dependencies');
+        }
+
         $config = new RepositoryStub();
         $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
         $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
@@ -67,20 +79,20 @@ class LogOutputBinderTest extends TestCase
         $commandFinished = new CommandFinished('Some\Command', $stringInput, new NullOutput(), 0);
         $defaultDriver = ['driver' => 'the-default'];
         $app = new ApplicationFake(['config' => ['logging.default' => $defaultDriver]]);
-        $logManager = new LogManager($app);
+        $logger = new LogManager($app);
 
-        $logOutputBinder->attach($commandStarting, $logManager);
-        $logOutputBinder->detach($commandFinished, $logManager);
+        $logOutputBinder->attach($commandStarting, $logger);
+        $logOutputBinder->detach($commandFinished, $logger);
 
-        self::assertSame($defaultDriver, $logManager->getDefaultDriver());
+        self::assertSame($defaultDriver, $logger->getDefaultDriver());
     }
 
     public function testDefaultDriverWithoutAttachIsNotConsoleLogg(): void
     {
         $app = new ApplicationFake(['config' => ['logging.default' => ['driver' => 'the-default']]]);
-        $logManager = new LogManager($app);
+        $logger = new LogManager($app);
         $expectation = 'console-logg';
 
-        self::assertNotSame($expectation, $logManager->getDefaultDriver());
+        self::assertNotSame($expectation, $logger->getDefaultDriver());
     }
 }

@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Tests\Unit\Listeners;
 
 use DevThis\ConsoleLogg\Binder\LogOutputBinder;
-use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
+use DevThis\ConsoleLogg\Listeners\LoggerResolveListener;
 use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Log\LogManager;
+use Illuminate\Log\Writer;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Tests\Doubles\Fakes\vendor\Illuminate\ApplicationFake;
@@ -20,14 +23,25 @@ use Tests\Doubles\Stubs\vendor\Illuminate\LogManagerStub;
 use Tests\Doubles\Stubs\vendor\Illuminate\RepositoryStub;
 
 /**
- * @covers \DevThis\ConsoleLogg\Listeners\LogManagerResolverListener
+ * @covers \DevThis\ConsoleLogg\Listeners\LoggerResolveListener
  */
-class LogManagerResolverListenerTest extends TestCase
+class LoggerResolveListenerTest extends TestCase
 {
     public function getInputsForEventDispatchListeningTo(): iterable
     {
         yield 'CommandStarting' => [CommandStarting::class];
         yield 'CommandFinished' => [CommandFinished::class];
+    }
+
+    public function getInputsForEventListeners(): iterable
+    {
+        if (class_exists(LogManager::class) === true) {
+            yield 'log manager' => ['logger' => new LogManager(new ApplicationFake())];
+        }
+
+        if (class_exists(Writer::class) === true) {
+            yield 'log writer' => ['logger' => new Writer(new Logger('logger'), new EventDispatcherFake())];
+        }
     }
 
     /**
@@ -42,7 +56,7 @@ class LogManagerResolverListenerTest extends TestCase
         $filterableConsoleFactory = new FilterableConsoleLoggerFactorySpy();
         $config = new RepositoryStub();
         $logOutputBinder = new LogOutputBinder($filterableConsoleFactory, $config);
-        $logManagerResolverListener = new LogManagerResolverListener($eventDispatcher, $logOutputBinder);
+        $logManagerResolverListener = new LoggerResolveListener($eventDispatcher, $logOutputBinder);
         $expectedListenersBefore = false;
         $expectedListenersAfter = true;
         $listenersBefore = $eventDispatcher->hasListeners($eventClass);
@@ -65,7 +79,7 @@ class LogManagerResolverListenerTest extends TestCase
     {
         $eventDispatcher = new EventDispatcherFake();
         $logOutputBinder = new LogOutputBinderFake();
-        $logManagerResolverListener = new LogManagerResolverListener($eventDispatcher, $logOutputBinder);
+        $logManagerResolverListener = new LoggerResolveListener($eventDispatcher, $logOutputBinder);
         $app = new ApplicationFake();
         $logManager = new LogManager($app);
         $logManagerResolverListener->handle($logManager, $app);
@@ -84,22 +98,23 @@ class LogManagerResolverListenerTest extends TestCase
     /**
      * Ensures the 'detach' is called on the LogOutputBinder, and the rightful event is passed through
      *
+     * @dataProvider getInputsForEventListeners
+     *
      * @todo stub Input/Output interfaces & CommandFinished
      */
-    public function testEventListenerDetachesLogManager(): void
+    public function testEventListenerDetachesLogManager(LoggerInterface $logger): void
     {
         $eventDispatcher = new EventDispatcherFake();
         $logOutputBinder = new LogOutputBinderFake();
-        $logManagerResolverListener = new LogManagerResolverListener($eventDispatcher, $logOutputBinder);
+        $logManagerResolverListener = new LoggerResolveListener($eventDispatcher, $logOutputBinder);
         $app = new ApplicationFake();
-        $logManager = new LogManager($app);
-        $logManagerResolverListener->handle($logManager, $app);
+        $logManagerResolverListener->handle($logger, $app);
         $event = new CommandFinished('some:command', new StringInput(''), new NullOutput(), 1);
         $actualBeforeEvent = $logOutputBinder->getLastDetachEvent();
         $expectedBeforeEvent = null;
         $expectedAfterEvent = $event;
         $closure = $eventDispatcher->getListener(CommandFinished::class);
-        $closure($event, new LogManagerStub());
+        $closure($event, $logger);
 
         self::assertSame($expectedAfterEvent, $logOutputBinder->getLastDetachEvent());
         self::assertSame($expectedBeforeEvent, $actualBeforeEvent);

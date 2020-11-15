@@ -7,7 +7,7 @@ namespace Tests\Doubles\Spies\Binder;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
 use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Console\Events\CommandStarting;
-use Illuminate\Log\LogManager;
+use Psr\Log\LoggerInterface;
 
 class LogOutputBinderFake implements LogOutputBindedInterface
 {
@@ -19,16 +19,16 @@ class LogOutputBinderFake implements LogOutputBindedInterface
 
     private $lastDetachLogManager = null;
 
-    public function attach(CommandStarting $commandEvent, LogManager $logManager): void
+    public function attach(CommandStarting $commandEvent, LoggerInterface $logger): void
     {
         $this->lastAttachEvent = $commandEvent;
-        $this->lastAttachLogManager = $logManager;
+        $this->lastAttachLogManager = $logger;
     }
 
-    public function detach(CommandFinished $commandFinished, LogManager $logManager): void
+    public function detach(CommandFinished $commandFinished, LoggerInterface $logger): void
     {
         $this->lastDetachEvent = $commandFinished;
-        $this->lastDetachLogManager = $logManager;
+        $this->lastDetachLogManager = $logger;
     }
 
     public function getLastAttachEvent(): ?CommandStarting
@@ -36,7 +36,7 @@ class LogOutputBinderFake implements LogOutputBindedInterface
         return $this->lastAttachEvent;
     }
 
-    public function getLastAttachLogManager(): ?LogManager
+    public function getLastAttachLogManager(): ?LoggerInterface
     {
         return $this->lastAttachLogManager;
     }
@@ -46,7 +46,7 @@ class LogOutputBinderFake implements LogOutputBindedInterface
         return $this->lastDetachEvent;
     }
 
-    public function getLastDetachLogManager(): ?LogManager
+    public function getLastDetachLogManager(): ?LoggerInterface
     {
         return $this->lastDetachLogManager;
     }

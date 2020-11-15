@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace DevThis\ConsoleLogg\Listeners;
 
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
-use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
+use DevThis\ConsoleLogg\Interfaces\Listener\LoggerResolveListenerInterface;
 use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Log\LogManager;
+use Psr\Log\LoggerInterface;
 
-class LogManagerResolverListener implements LogManagerResolverListenerInterface
+class LoggerResolveListener implements LoggerResolveListenerInterface
 {
     /**
      * @var \Illuminate\Contracts\Events\Dispatcher
@@ -33,19 +33,19 @@ class LogManagerResolverListener implements LogManagerResolverListenerInterface
     /**
      * @inheritDoc
      */
-    public function handle(LogManager $logManager, Application $application): void
+    public function handle(LoggerInterface $logger, Application $application): void
     {
         $this->eventDispatcher->listen(
             CommandStarting::class,
-            function (CommandStarting $event) use ($logManager) {
-                $this->logOutputBinder->attach($event, $logManager);
+            function (CommandStarting $event) use ($logger) {
+                $this->logOutputBinder->attach($event, $logger);
             }
         );
 
         $this->eventDispatcher->listen(
             CommandFinished::class,
-            function (CommandFinished $event) use ($logManager) {
-                $this->logOutputBinder->detach($event, $logManager);
+            function (CommandFinished $event) use ($logger) {
+                $this->logOutputBinder->detach($event, $logger);
             }
         );
     }
