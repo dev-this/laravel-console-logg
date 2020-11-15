@@ -6,10 +6,15 @@ namespace Tests\Doubles\Fakes\vendor\Illuminate;
 
 use ArrayObject;
 use Closure;
+use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
+use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
 use Illuminate\Contracts\Foundation\Application;
+use Tests\Doubles\Spies\Binder\LogOutputBinderFake;
 
 class ApplicationFake extends ArrayObject implements Application
 {
+    private $registered = [];
+
     public function __construct(?array $array = null)
     {
         parent::__construct($array ?? []);
@@ -114,6 +119,7 @@ class ApplicationFake extends ArrayObject implements Application
 
     public function get($id)
     {
+        return $this->registered[$id] ?? $id;
     }
 
     public function getCachedConfigPath()
@@ -170,6 +176,9 @@ class ApplicationFake extends ArrayObject implements Application
 
     public function make($abstract, array $parameters = [])
     {
+        if ($abstract === LogManagerResolverListenerInterface::class) {
+            return new LogManagerResolverListener(new EventDispatcherFake(), new LogOutputBinderFake());
+        }
     }
 
     public function register($provider, $force = false)
@@ -222,6 +231,7 @@ class ApplicationFake extends ArrayObject implements Application
 
     public function singleton($abstract, $concrete = null)
     {
+        $this->registered[$abstract] = $concrete ?? $abstract;
     }
 
     public function singletonIf($abstract, $concrete = null)

@@ -55,8 +55,8 @@ class ConsoleLoggServiceProvider extends ServiceProvider
             LogManager::class,
             Closure::fromCallable(
                 [
-                    $this->app->make(LogManagerResolverListener::class),
-                    'resolve'
+                    $this->app->make(LogManagerResolverListenerInterface::class),
+                    'handle'
                 ]
             )
         );

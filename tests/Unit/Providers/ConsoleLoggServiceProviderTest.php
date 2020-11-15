@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Providers;
 
+use DevThis\ConsoleLogg\Binder\LogOutputBinder;
+use DevThis\ConsoleLogg\Factories\FilterableConsoleLoggerFactory;
+use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
+use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
+use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
+use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
 use DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -24,7 +30,7 @@ class ConsoleLoggServiceProviderTest extends TestCase
         $app = new ApplicationFake();
         // if we don't use reflection to determine file location we would need fuzzy asserting
         $reflection = new ReflectionClass(ConsoleLoggServiceProvider::class);
-        $s = new ConsoleLoggServiceProvider($app);
+        $serviceProvider = new ConsoleLoggServiceProvider($app);
         $expectedPublishedPathsBefore = [];
         $actualPublishedPathsBefore = ConsoleLoggServiceProvider::pathsToPublish();
         $expectedPublishedPaths = [
@@ -35,10 +41,25 @@ class ConsoleLoggServiceProviderTest extends TestCase
             ) => '%APP%/' . 'console-logg.php'
         ];
 
-        $s->boot();
+        $serviceProvider->boot();
         $publishedPaths = ConsoleLoggServiceProvider::pathsToPublish();
 
         self::assertSame($expectedPublishedPaths, $publishedPaths);
         self::assertSame($expectedPublishedPathsBefore, $actualPublishedPathsBefore);
+    }
+
+    public function testRegisterBindings(): void
+    {
+        $app = new ApplicationFake();
+        $serviceProvider = new ConsoleLoggServiceProvider($app);
+
+        $serviceProvider->register();
+
+        self::assertSame(LogOutputBinder::class, $app->get(LogOutputBindedInterface::class));
+        self::assertSame(LogManagerResolverListener::class, $app->get(LogManagerResolverListenerInterface::class));
+        self::assertSame(
+            FilterableConsoleLoggerFactory::class,
+            $app->get(FilterableConsoleLoggerFactoryInterface::class)
+        );
     }
 }
