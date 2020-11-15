@@ -2,9 +2,9 @@ name: Laravel IRL tests
 
 on:
   push:
-    branches: [ laravel-irl-tests ]
+    branches: [ laravel-functional-tests ]
   pull_request:
-    branches: [ laravel-irl-tests ]
+    branches: [ laravel-functional-tests ]
 
 jobs:
   laravel-tests:
