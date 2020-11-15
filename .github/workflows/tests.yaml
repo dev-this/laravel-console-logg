@@ -1,4 +1,4 @@
-name: tests
+name: PHPUnit suite
 
 on:
   push:
@@ -35,8 +35,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "illuminate/contracts=${{ matrix.laravel }}" --no-update
-          composer update --prefer-dist --no-interaction --no-progress
+          composer require "illuminate/contracts=${{ matrix.laravel }}" --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
+          composer update --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
 
       - name: Configure matchers
         uses: mheap/phpunit-matcher-action@v1

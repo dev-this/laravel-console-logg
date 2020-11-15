@@ -1,4 +1,4 @@
-name: tests
+name: Code Coverage
 
 on:
   push:
@@ -27,9 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "illuminate/contracts=^8.0" --no-update
-          composer update --prefer-dist --no-interaction --no-progress
-          ls -lha
+          composer install --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
 
       - name: Execute tests
         run: vendor/bin/phpunit --coverage-clover coverage.xml

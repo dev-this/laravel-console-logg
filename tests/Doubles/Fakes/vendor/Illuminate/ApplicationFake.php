@@ -39,6 +39,10 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
+    public function environmentPath()
+    {
+    }
+
     public function storagePath()
     {
     }

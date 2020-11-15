@@ -58,7 +58,7 @@ Otherwise you can manually add the provider
 
 ## Safe
 - ConsoleLogg has 100% code coverage with unit tests
-  - PCov is used for accurate branch analysis 
+  - Xdebug for coverage driver for accurate branch analysis _(PCov not available for compatibility with Laravel >=5.6)_ :sob:
   - `@covers` annotations used in unit tests for contextual line coverage 
 - Compatibility thoroughly tested through real world tests
   - All tests are run independently against PHP 7.1, 7.2, 7.3, 7.4 * each Laravel contracts, of each major version + all minor versions above 5.5
