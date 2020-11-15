@@ -119,6 +119,14 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
+    public function getCachedPackagesPath()
+    {
+    }
+
+    public function getCachedRoutesPath()
+    {
+    }
+
     public function getCachedServicesPath()
     {
     }
@@ -152,6 +160,10 @@ class ApplicationFake extends ArrayObject implements Application
     }
 
     public function loadDeferredProviders()
+    {
+    }
+
+    public function loadEnvironmentFrom($file)
     {
     }
 
