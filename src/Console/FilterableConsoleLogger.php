@@ -23,7 +23,10 @@ class FilterableConsoleLogger extends ConsoleLogger implements FilterableConsole
         parent::log($level, $message, $context);
     }
 
-    public function setFiltered(bool $isFiltered): self
+    /**
+     * @inheritDoc
+     */
+    public function setFiltered(bool $isFiltered): FilterableConsoleLoggerInterface
     {
         $this->isFiltered = $isFiltered;
 

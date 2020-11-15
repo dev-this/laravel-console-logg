@@ -11,6 +11,8 @@ interface FilterableConsoleLoggerInterface extends LoggerInterface
     /**
      * Sets the state for whether log filtering (by context) is enabled
      * 'logg' => true should
+     *
+     * @return \DevThis\ConsoleLogg\Interfaces\Console\FilterableConsoleLoggerInterface
      */
-    public function setFiltered(bool $isFiltered): self;
+    public function setFiltered(bool $isFiltered): FilterableConsoleLoggerInterface;
 }
