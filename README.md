@@ -159,7 +159,7 @@ class MyConsoleApp extends Command
 
 - **Zero external dependencies** outside of Laravel contracts
 - No external dependencies
-- No memory leakage
+- No memory leakage (Not yet proven)
     - One time use console logger is attached & detached alongside command execution
     - All references destroyed after command termination _(letting PHP Garbage Collection do its thing)_
 - Service Provider lazily works only when running in console mode

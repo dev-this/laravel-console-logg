@@ -11,6 +11,11 @@ use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
 
+/**
+ * Responsible for binding a ConsoleLogger instance with the built-in Laravel Logger, and removing
+ *
+ * @todo nested artisan command call compatibility
+ */
 class LogOutputBinder implements LogOutputBindedInterface
 {
     /**
