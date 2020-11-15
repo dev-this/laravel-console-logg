@@ -10,6 +10,10 @@
         <testsuite name="unit">
             <directory>tests/Unit</directory>
         </testsuite>
+        <testsuite name="phpt">
+            <directory>tests/PhpTestCase</directory>
+            <directory suffix=".phpt">test</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
