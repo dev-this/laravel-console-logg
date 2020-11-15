@@ -77,4 +77,19 @@ class ConsoleLoggServiceProviderTest extends TestCase
             $app->get(FilterableConsoleLoggerFactoryInterface::class)
         );
     }
+
+    public function testRegisterSetsFakeLoggingChannel(): void
+    {
+        $app = new ApplicationFake();
+        $serviceProvider = new ConsoleLoggServiceProvider($app);
+        $expectationBefore = null;
+        $expectationAfter = ['logging.channels.console-logg' => ['driver' => 'console-logg']];
+        $actualBefore = $app['config'] ?? null;
+        $serviceProvider->register();
+
+        $result = $app['config'] ?? null;
+
+        self::assertSame($expectationAfter, $result);
+        self::assertSame($expectationBefore, $actualBefore);
+    }
 }

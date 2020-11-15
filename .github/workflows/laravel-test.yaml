@@ -1,0 +1,72 @@
+name: Laravel IRL tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ 7.2, 7.3, 7.4 ]
+        #laravel: [~5.6.0, ~5.7.0, ~5.8.0, ~5.9.0, ^6.0, ^7.0, ^8.0]
+        laravel: [ ^6.0, ^7.0, ^8.0 ]
+        exclude:
+          - php: 7.2
+            laravel: ^8.0
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: 'console-logg-package'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Install console-logg dependencies
+        run: |
+          cd console-logg-package
+          composer install --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
+
+      - name: Setup Laravel application
+        run: |
+          composer create-project --prefer-dist laravel/laravel:${{ matrix.laravel }} laravel-app
+          cd laravel-app
+
+      - name: Add local path composer dependency
+        run: |
+          cd laravel-app
+          jq '.repositories[0].type="path"' composer.json > composer.temp.json
+          jq '.repositories[0].url="../console-logg-package"' composer.json > composer.temp.json
+          jq '.require."devthis/console-logg"="*"' composer.json > composer.temp.json
+          mv composer.temp.json composer.json
+          composer update --no-interaction --no-progress --ignore-platform-reqs
+
+      - name: Copy fixtures into Laravel app
+        run: |
+          mkdir -p laravel-app/app/Console/Commands
+          cp console-logg-package/tests/Fixtures/ArtisanCommand.php laravel-app/app/Console/Commands/
+          cp console-logg-package/tests/Fixtures/ServiceThatLoggs.php laravel-app/app/
+
+      - name: Run Laravel package discovery
+        run: |
+          cd laravel-app
+          php artisan package:discover --ansi
+          php artisan clear-compiled
+
+      - name: Run PHPT
+        run: |
+          cd console-logg-package
+          vendor/bin/phpunit tests/PhpTestCase/ --testdox
