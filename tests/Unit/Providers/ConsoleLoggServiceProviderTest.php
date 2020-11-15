@@ -62,4 +62,19 @@ class ConsoleLoggServiceProviderTest extends TestCase
             $app->get(FilterableConsoleLoggerFactoryInterface::class)
         );
     }
+
+    public function testRegisterDoesNothingForNonConsole(): void
+    {
+        $app = new ApplicationFake(null, false);
+        $serviceProvider = new ConsoleLoggServiceProvider($app);
+
+        $serviceProvider->register();
+
+        self::assertNotSame(LogOutputBinder::class, $app->get(LogOutputBindedInterface::class));
+        self::assertNotSame(LogManagerResolverListener::class, $app->get(LogManagerResolverListenerInterface::class));
+        self::assertNotSame(
+            FilterableConsoleLoggerFactory::class,
+            $app->get(FilterableConsoleLoggerFactoryInterface::class)
+        );
+    }
 }

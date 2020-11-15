@@ -13,11 +13,14 @@ use Tests\Doubles\Spies\Binder\LogOutputBinderFake;
 
 class ApplicationFake extends ArrayObject implements Application
 {
+    private $isConsole;
+
     private $registered = [];
 
-    public function __construct(?array $array = null)
+    public function __construct(?array $array = null, ?bool $isConsole = null)
     {
         parent::__construct($array ?? []);
+        $this->isConsole = $isConsole ?? true;
     }
 
     public function addContextualBinding($concrete, $abstract, $implementation)
@@ -215,6 +218,7 @@ class ApplicationFake extends ArrayObject implements Application
 
     public function runningInConsole()
     {
+        return $this->isConsole;
     }
 
     public function runningUnitTests()
