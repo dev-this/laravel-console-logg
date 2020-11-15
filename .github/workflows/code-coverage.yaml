@@ -21,7 +21,7 @@ on:
 jobs:
   code-cov:
     runs-on: ubuntu-latest
-    name: Code coverage peport
+    name: Code coverage report
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

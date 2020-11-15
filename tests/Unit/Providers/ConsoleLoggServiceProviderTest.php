@@ -80,7 +80,7 @@ class ConsoleLoggServiceProviderTest extends TestCase
 
     public function testRegisterSetsFakeLoggingChannel(): void
     {
-        $app = new ApplicationFake();
+        $app = new ApplicationFake(['config']);
         $serviceProvider = new ConsoleLoggServiceProvider($app);
         $expectationBefore = null;
         $expectationAfter = ['logging.channels.console-logg' => ['driver' => 'console-logg']];
