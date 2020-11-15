@@ -37,6 +37,18 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
+    public function configurationIsCached()
+    {
+    }
+
+    public function environmentPath()
+    {
+    }
+
+    public function detectEnvironment(Closure $callback)
+    {
+    }
+
     public function databasePath($path = '')
     {
     }
