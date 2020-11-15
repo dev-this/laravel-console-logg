@@ -1,11 +1,14 @@
 {
     "name": "devthis/console-logg",
-    "description": "Effortless non-custom PSR-3/Log Facade to your console applications",
+    "description": "Effortless artisan console output with your usual Laravel logger",
     "keywords": [
         "laravel",
         "symfony",
         "console",
+        "logg",
+        "consolelogg",
         "psr3",
+        "psr-3",
         "logger",
         "channels"
     ],
@@ -34,12 +37,12 @@
             "DevThis\\ConsoleLogg\\": "src/"
         }
     },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
+    "autoload-dev": {
+      "psr-4": {
+        "Tests\\": "tests/"
+      }
+    },
     "require-dev": {
-        "phpunit/phpunit": ">=7"
+        "phpunit/phpunit": "^7.0"
     }
 }

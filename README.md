@@ -21,6 +21,7 @@ This pacakge allows you to send output to a console application using the built-
 
 It works out of the box with zero configuration.
 
+
 ## Install
 
 1. Install the package via Composer:
@@ -35,15 +36,34 @@ It works out of the box with zero configuration.
 # Features
 
 ## Zero configuration
-Providing you've run `composer require` without `--no-scripts`, the only dependency (provider) will be automatically installed.
+ConsoleLogg service provider will be automatically added as a provider for your application.
+
+However, if installed with `composer require --no-scripts` you will need to manually add the provider into your `config/app.php`
+```php
+'providers' => [
+    //...
+    \DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider::class,
+];
+```
 
 Otherwise you can manually add the provider
 
 ## Efficient
-- No memory leaks
+- **Zero external dependencies** outside of Laravel contracts
+- No external dependencies
+- Tested for memory leaks
   - One time use console logger is attached & detached as required
   - All references destroyed after command termination (letting PHP Garbage Collector to do its thing)
-- Service Provider ensures nothing is initialized when using non-CLI mode 
+- Service Provider does not register components when initialized when using non-CLI mode (ie. web)
+
+## Safe
+- ConsoleLogg has 100% code coverage with unit tests
+  - PCov is used for accurate branch analysis 
+  - `@covers` annotations used in unit tests for contextual line coverage 
+- Compatibility thoroughly tested through real world tests
+  - All tests are run independently against PHP 7.1, 7.2, 7.3, 7.4 * each Laravel contracts, of each major version + all minor versions above 5.5
+     - Unit tests ensure type-compatibility, expected behaviour is met & compatibility with each version of Laravel contracts
+     - [TODO] Functional tests ensure real world expectations are through a real Laravel application
 
 ## Verbosity
 - Respects the default built-in Symfony verbosity mappings
@@ -54,7 +74,7 @@ Otherwise you can manually add the provider
 | -vv |`notice` + all of above |
 | -vvv | `info` + all of above |
 
-`debug` level logs will only be present when `APP_DEBUG=1`
+`debug` level logs will only be present when `APP_DEBUG=1` & `-vvv` is used
 
 ## Works with command-in-command
 
@@ -123,7 +143,7 @@ class ExampleConsole extends Command
 
 Running the console
 ```bash
-mitchell@mitchell-linux:~/MyProject$ php artisan something
+not-root@linux:~/MyProject$ php artisan something
 [debug] A message that may be meaningful to a console app using this service
 [info] or just the facade if you love magic
 ```

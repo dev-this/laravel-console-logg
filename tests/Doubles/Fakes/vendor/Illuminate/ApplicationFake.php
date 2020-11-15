@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Tests\Doubles\Fakes\vendor\Illuminate;
 
 use Closure;
+use ArrayObject;
 use Illuminate\Contracts\Foundation\Application;
 
-class ApplicationFake extends \ArrayObject implements Application
+class ApplicationFake extends ArrayObject implements Application
 {
     public function __construct(?array $array = null)
     {
