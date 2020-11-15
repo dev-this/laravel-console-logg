@@ -31,7 +31,7 @@ jobs:
           php-version: 7.4
           extensions: dom, curl, libxml, mbstring, zip
           tools: composer:v2
-          coverage: pcov
+          coverage: xdebug
 
       - name: Install dependencies
         run: |
