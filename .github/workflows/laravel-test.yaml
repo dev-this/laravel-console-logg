@@ -2,9 +2,9 @@ name: Laravel IRL tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ laravel-5-compat ]
   pull_request:
-    branches: [ master ]
+    branches: [ laravel-5-compat ]
 
 jobs:
   laravel-tests:
