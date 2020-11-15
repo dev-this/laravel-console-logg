@@ -47,8 +47,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "illuminate/contracts=${{ matrix.laravel }}" --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
-          composer update --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
+          composer require "illuminate/contracts=${{ matrix.laravel }}" --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
+          composer update --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
 
       - name: Configure matchers
         uses: mheap/phpunit-matcher-action@v1

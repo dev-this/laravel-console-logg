@@ -36,7 +36,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer install --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
+          composer install --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
 
       - name: Execute tests
         run: vendor/bin/phpunit --coverage-clover coverage.xml
