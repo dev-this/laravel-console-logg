@@ -91,6 +91,10 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
+    public function environmentFilePath()
+    {
+    }
+
     public function environmentPath()
     {
     }
@@ -108,6 +112,14 @@ class ApplicationFake extends ArrayObject implements Application
     }
 
     public function get($id)
+    {
+    }
+
+    public function getCachedConfigPath()
+    {
+    }
+
+    public function getCachedServicesPath()
     {
     }
 
