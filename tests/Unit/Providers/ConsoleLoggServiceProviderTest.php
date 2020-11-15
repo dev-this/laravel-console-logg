@@ -80,14 +80,14 @@ class ConsoleLoggServiceProviderTest extends TestCase
 
     public function testRegisterSetsFakeLoggingChannel(): void
     {
-        $app = new ApplicationFake(['config']);
+        $app = new ApplicationFake();
         $serviceProvider = new ConsoleLoggServiceProvider($app);
         $expectationBefore = null;
         $expectationAfter = ['logging.channels.console-logg' => ['driver' => 'console-logg']];
-        $actualBefore = $app['config'];
+        $actualBefore = $app['config'] ?? null;
         $serviceProvider->register();
 
-        $result = $app['config'];
+        $result = $app['config'] ?? null;
 
         self::assertSame($expectationAfter, $result);
         self::assertSame($expectationBefore, $actualBefore);
