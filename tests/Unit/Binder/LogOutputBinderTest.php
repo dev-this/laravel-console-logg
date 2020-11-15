@@ -6,15 +6,15 @@ namespace Tests\Unit\Binder;
 
 use DevThis\ConsoleLogg\Binder\LogOutputBinder;
 use Illuminate\Console\Events\CommandFinished;
-use Tests\Doubles\Fakes\vendor\Illuminate\ApplicationFake;
-use Tests\Doubles\Spies\Factories\FilterableConsoleLoggerFactorySpy;
-use Tests\Doubles\Spies\vendor\Illuminate\LogManagerSpy;
-use Tests\Doubles\Stubs\vendor\Illuminate\RepositoryStub;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Log\LogManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Tests\Doubles\Fakes\vendor\Illuminate\ApplicationFake;
+use Tests\Doubles\Spies\Factories\FilterableConsoleLoggerFactorySpy;
+use Tests\Doubles\Spies\vendor\Illuminate\LogManagerSpy;
+use Tests\Doubles\Stubs\vendor\Illuminate\RepositoryStub;
 
 /**
  * @covers \DevThis\ConsoleLogg\Binder\LogOutputBinder
@@ -37,33 +37,6 @@ class LogOutputBinderTest extends TestCase
         self::assertSame($expectation, $logManager->getDefaultDriver());
     }
 
-    public function testDefaultDriverWithoutAttachIsNotConsoleLogg(): void
-    {
-        $app = new ApplicationFake(['config' => ['logging.default' => ['driver' => 'the-default']]]);
-        $logManager = new LogManager($app);
-        $expectation = 'console-logg';
-
-        self::assertNotSame($expectation, $logManager->getDefaultDriver());
-    }
-
-    public function testDefaultDriverAfterDetachIsNotConsoleLogg(): void
-    {
-        $config = new RepositoryStub();
-        $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
-        $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
-        $stringInput = new StringInput('some:command');
-        $commandStarting = new CommandStarting('Some\Command', $stringInput, new NullOutput());
-        $commandFinished = new CommandFinished('Some\Command', $stringInput, new NullOutput(),0);
-        $defaultDriver = ['driver' => 'the-default'];
-        $app = new ApplicationFake(['config' => ['logging.default' => $defaultDriver]]);
-        $logManager = new LogManager($app);
-
-        $logOutputBinder->attach($commandStarting, $logManager);
-        $logOutputBinder->detach($commandFinished, $logManager);
-
-        self::assertSame($defaultDriver, $logManager->getDefaultDriver());
-    }
-
     public function testAttachedConsoleLoggerRespectsFilteredOption(): void
     {
         $config = new RepositoryStub();
@@ -79,6 +52,36 @@ class LogOutputBinderTest extends TestCase
 
         $logOutputBinder->attach($commandStarting, $logManager);
 
-        self::assertEquals($filterableConsoleLoggerFactory->getLastCreated(), $logManager->getCustomCreator('console-logg')());
+        self::assertEquals(
+            $filterableConsoleLoggerFactory->getLastCreated(),
+            $logManager->getCustomCreator('console-logg')()
+        );
+    }
+
+    public function testDefaultDriverAfterDetachIsNotConsoleLogg(): void
+    {
+        $config = new RepositoryStub();
+        $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
+        $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
+        $stringInput = new StringInput('some:command');
+        $commandStarting = new CommandStarting('Some\Command', $stringInput, new NullOutput());
+        $commandFinished = new CommandFinished('Some\Command', $stringInput, new NullOutput(), 0);
+        $defaultDriver = ['driver' => 'the-default'];
+        $app = new ApplicationFake(['config' => ['logging.default' => $defaultDriver]]);
+        $logManager = new LogManager($app);
+
+        $logOutputBinder->attach($commandStarting, $logManager);
+        $logOutputBinder->detach($commandFinished, $logManager);
+
+        self::assertSame($defaultDriver, $logManager->getDefaultDriver());
+    }
+
+    public function testDefaultDriverWithoutAttachIsNotConsoleLogg(): void
+    {
+        $app = new ApplicationFake(['config' => ['logging.default' => ['driver' => 'the-default']]]);
+        $logManager = new LogManager($app);
+        $expectation = 'console-logg';
+
+        self::assertNotSame($expectation, $logManager->getDefaultDriver());
     }
 }

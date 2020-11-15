@@ -24,7 +24,8 @@ class LogManagerResolverListener implements LogManagerResolverListenerInterface
      */
     private $logOutputBinder;
 
-    public function __construct(EventDispatcher $eventDispatcher, LogOutputBindedInterface $logOutputBinder) {
+    public function __construct(EventDispatcher $eventDispatcher, LogOutputBindedInterface $logOutputBinder)
+    {
         $this->eventDispatcher = $eventDispatcher;
         $this->logOutputBinder = $logOutputBinder;
     }

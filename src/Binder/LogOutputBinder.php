@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DevThis\ConsoleLogg\Binder;
 
-use DevThis\ConsoleLogg\Console\FilterableConsoleLogger;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
 use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
 use Illuminate\Console\Events\CommandFinished;
@@ -15,6 +14,11 @@ use Illuminate\Log\LogManager;
 class LogOutputBinder implements LogOutputBindedInterface
 {
     /**
+     * @var FilterableConsoleLoggerFactoryInterface
+     */
+    private $consoleLoggerFactory;
+
+    /**
      * @var string|null
      */
     private $defaultDriver = null;
@@ -23,11 +27,6 @@ class LogOutputBinder implements LogOutputBindedInterface
      * @var bool
      */
     private $isFiltered;
-
-    /**
-     * @var FilterableConsoleLoggerFactoryInterface
-     */
-    private $consoleLoggerFactory;
 
     public function __construct(FilterableConsoleLoggerFactoryInterface $consoleLoggerFactory, Repository $config)
     {

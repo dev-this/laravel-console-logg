@@ -4,24 +4,34 @@ declare(strict_types=1);
 
 namespace Tests\Doubles\Stubs\vendor\Illuminate;
 
+use ArrayObject;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 
-class ApplicationStub extends \ArrayObject implements Application
+class ApplicationStub extends ArrayObject implements Application
 {
-    public function __get($n) {
+    public function __get($n)
+    {
         return $this[$n];
     }
 
-    public function __set($key, $value) {
-
+    public function __isset($key)
+    {
     }
 
-    public function __isset($key) {
-
+    public function __set($key, $value)
+    {
     }
 
-    public function version()
+    public function addContextualBinding($concrete, $abstract, $implementation)
+    {
+    }
+
+    public function afterResolving($abstract, Closure $callback = null)
+    {
+    }
+
+    public function alias($abstract, $alias)
     {
     }
 
@@ -29,7 +39,39 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
+    public function bind($abstract, $concrete = null, $shared = false)
+    {
+    }
+
+    public function bindIf($abstract, $concrete = null, $shared = false)
+    {
+    }
+
+    public function boot()
+    {
+    }
+
+    public function booted($callback)
+    {
+    }
+
+    public function booting($callback)
+    {
+    }
+
     public function bootstrapPath($path = '')
+    {
+    }
+
+    public function bootstrapWith(array $bootstrappers)
+    {
+    }
+
+    public function bound($abstract)
+    {
+    }
+
+    public function call($callback, array $parameters = [], $defaultMethod = null)
     {
     }
 
@@ -41,7 +83,7 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
-    public function environmentPath()
+    public function databasePath($path = '')
     {
     }
 
@@ -49,63 +91,27 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
-    public function databasePath($path = '')
-    {
-    }
-
-    public function resourcePath($path = '')
-    {
-    }
-
-    public function storagePath()
-    {
-    }
-
     public function environment(...$environments)
     {
     }
 
-    public function runningInConsole()
+    public function environmentPath()
     {
     }
 
-    public function runningUnitTests()
+    public function extend($abstract, Closure $closure)
     {
     }
 
-    public function isDownForMaintenance()
+    public function factory($abstract)
     {
     }
 
-    public function registerConfiguredProviders()
+    public function flush()
     {
     }
 
-    public function register($provider, $force = false)
-    {
-    }
-
-    public function registerDeferredProvider($provider, $service = null)
-    {
-    }
-
-    public function resolveProvider($provider)
-    {
-    }
-
-    public function boot()
-    {
-    }
-
-    public function booting($callback)
-    {
-    }
-
-    public function booted($callback)
-    {
-    }
-
-    public function bootstrapWith(array $bootstrappers)
+    public function get($id)
     {
     }
 
@@ -121,59 +127,11 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
+    public function has($id)
+    {
+    }
+
     public function hasBeenBootstrapped()
-    {
-    }
-
-    public function loadDeferredProviders()
-    {
-    }
-
-    public function setLocale($locale)
-    {
-    }
-
-    public function shouldSkipMiddleware()
-    {
-    }
-
-    public function terminate()
-    {
-    }
-
-    public function bound($abstract)
-    {
-    }
-
-    public function alias($abstract, $alias)
-    {
-    }
-
-    public function tag($abstracts, $tags)
-    {
-    }
-
-    public function tagged($tag)
-    {
-    }
-
-    public function bind($abstract, $concrete = null, $shared = false)
-    {
-    }
-
-    public function bindIf($abstract, $concrete = null, $shared = false)
-    {
-    }
-
-    public function singleton($abstract, $concrete = null)
-    {
-    }
-
-    public function singletonIf($abstract, $concrete = null)
-    {
-    }
-
-    public function extend($abstract, Closure $closure)
     {
     }
 
@@ -181,19 +139,11 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
-    public function addContextualBinding($concrete, $abstract, $implementation)
+    public function isDownForMaintenance()
     {
     }
 
-    public function when($concrete)
-    {
-    }
-
-    public function factory($abstract)
-    {
-    }
-
-    public function flush()
+    public function loadDeferredProviders()
     {
     }
 
@@ -201,7 +151,19 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
-    public function call($callback, array $parameters = [], $defaultMethod = null)
+    public function register($provider, $force = false)
+    {
+    }
+
+    public function registerConfiguredProviders()
+    {
+    }
+
+    public function registerDeferredProvider($provider, $service = null)
+    {
+    }
+
+    public function resolveProvider($provider)
     {
     }
 
@@ -213,15 +175,55 @@ class ApplicationStub extends \ArrayObject implements Application
     {
     }
 
-    public function afterResolving($abstract, Closure $callback = null)
+    public function resourcePath($path = '')
     {
     }
 
-    public function get($id)
+    public function runningInConsole()
     {
     }
 
-    public function has($id)
+    public function runningUnitTests()
+    {
+    }
+
+    public function setLocale($locale)
+    {
+    }
+
+    public function shouldSkipMiddleware()
+    {
+    }
+
+    public function singleton($abstract, $concrete = null)
+    {
+    }
+
+    public function singletonIf($abstract, $concrete = null)
+    {
+    }
+
+    public function storagePath()
+    {
+    }
+
+    public function tag($abstracts, $tags)
+    {
+    }
+
+    public function tagged($tag)
+    {
+    }
+
+    public function terminate()
+    {
+    }
+
+    public function version()
+    {
+    }
+
+    public function when($concrete)
     {
     }
 }

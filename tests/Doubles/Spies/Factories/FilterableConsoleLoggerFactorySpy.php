@@ -6,7 +6,6 @@ namespace Tests\Doubles\Spies\Factories;
 
 use DevThis\ConsoleLogg\Factories\FilterableConsoleLoggerFactory;
 use DevThis\ConsoleLogg\Interfaces\Console\FilterableConsoleLoggerInterface;
-use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class FilterableConsoleLoggerFactorySpy extends FilterableConsoleLoggerFactory
@@ -16,13 +15,13 @@ class FilterableConsoleLoggerFactorySpy extends FilterableConsoleLoggerFactory
      */
     private $lastCreated;
 
-    public function getLastCreated(): ?FilterableConsoleLoggerInterface
-    {
-        return $this->lastCreated;
-    }
-
     public function create(OutputInterface $output, ?bool $isFiltered = null): FilterableConsoleLoggerInterface
     {
         return $this->lastCreated = parent::create($output, $isFiltered);
+    }
+
+    public function getLastCreated(): ?FilterableConsoleLoggerInterface
+    {
+        return $this->lastCreated;
     }
 }

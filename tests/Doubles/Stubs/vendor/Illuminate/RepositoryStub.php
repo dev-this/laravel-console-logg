@@ -8,7 +8,7 @@ use Illuminate\Contracts\Config\Repository;
 
 class RepositoryStub implements Repository
 {
-    public function has($key)
+    public function all()
     {
     }
 
@@ -16,11 +16,7 @@ class RepositoryStub implements Repository
     {
     }
 
-    public function all()
-    {
-    }
-
-    public function set($key, $value = null)
+    public function has($key)
     {
     }
 
@@ -29,6 +25,10 @@ class RepositoryStub implements Repository
     }
 
     public function push($key, $value)
+    {
+    }
+
+    public function set($key, $value = null)
     {
     }
 }

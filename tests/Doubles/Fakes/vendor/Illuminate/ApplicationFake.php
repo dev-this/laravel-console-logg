@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Doubles\Fakes\vendor\Illuminate;
 
-use Closure;
 use ArrayObject;
+use Closure;
 use Illuminate\Contracts\Foundation\Application;
 
 class ApplicationFake extends ArrayObject implements Application
@@ -15,7 +15,15 @@ class ApplicationFake extends ArrayObject implements Application
         parent::__construct($array);
     }
 
-    public function version()
+    public function addContextualBinding($concrete, $abstract, $implementation)
+    {
+    }
+
+    public function afterResolving($abstract, Closure $callback = null)
+    {
+    }
+
+    public function alias($abstract, $alias)
     {
     }
 
@@ -23,59 +31,11 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
-    public function bootstrapPath($path = '')
+    public function bind($abstract, $concrete = null, $shared = false)
     {
     }
 
-    public function configPath($path = '')
-    {
-    }
-
-    public function databasePath($path = '')
-    {
-    }
-
-    public function resourcePath($path = '')
-    {
-    }
-
-    public function environmentPath()
-    {
-    }
-
-    public function storagePath()
-    {
-    }
-
-    public function environment(...$environments)
-    {
-    }
-
-    public function runningInConsole()
-    {
-    }
-
-    public function runningUnitTests()
-    {
-    }
-
-    public function isDownForMaintenance()
-    {
-    }
-
-    public function registerConfiguredProviders()
-    {
-    }
-
-    public function register($provider, $force = false)
-    {
-    }
-
-    public function registerDeferredProvider($provider, $service = null)
-    {
-    }
-
-    public function resolveProvider($provider)
+    public function bindIf($abstract, $concrete = null, $shared = false)
     {
     }
 
@@ -83,15 +43,71 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
-    public function booting($callback)
-    {
-    }
-
     public function booted($callback)
     {
     }
 
+    public function booting($callback)
+    {
+    }
+
+    public function bootstrapPath($path = '')
+    {
+    }
+
     public function bootstrapWith(array $bootstrappers)
+    {
+    }
+
+    public function bound($abstract)
+    {
+    }
+
+    public function call($callback, array $parameters = [], $defaultMethod = null)
+    {
+    }
+
+    public function configPath($path = '')
+    {
+    }
+
+    public function configurationIsCached()
+    {
+    }
+
+    public function databasePath($path = '')
+    {
+    }
+
+    public function detectEnvironment(Closure $callback)
+    {
+    }
+
+    public function environment(...$environments)
+    {
+    }
+
+    public function environmentFile()
+    {
+    }
+
+    public function environmentPath()
+    {
+    }
+
+    public function extend($abstract, Closure $closure)
+    {
+    }
+
+    public function factory($abstract)
+    {
+    }
+
+    public function flush()
+    {
+    }
+
+    public function get($id)
     {
     }
 
@@ -107,59 +123,11 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
+    public function has($id)
+    {
+    }
+
     public function hasBeenBootstrapped()
-    {
-    }
-
-    public function loadDeferredProviders()
-    {
-    }
-
-    public function setLocale($locale)
-    {
-    }
-
-    public function shouldSkipMiddleware()
-    {
-    }
-
-    public function terminate()
-    {
-    }
-
-    public function bound($abstract)
-    {
-    }
-
-    public function alias($abstract, $alias)
-    {
-    }
-
-    public function tag($abstracts, $tags)
-    {
-    }
-
-    public function tagged($tag)
-    {
-    }
-
-    public function bind($abstract, $concrete = null, $shared = false)
-    {
-    }
-
-    public function bindIf($abstract, $concrete = null, $shared = false)
-    {
-    }
-
-    public function singleton($abstract, $concrete = null)
-    {
-    }
-
-    public function singletonIf($abstract, $concrete = null)
-    {
-    }
-
-    public function extend($abstract, Closure $closure)
     {
     }
 
@@ -167,19 +135,11 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
-    public function addContextualBinding($concrete, $abstract, $implementation)
+    public function isDownForMaintenance()
     {
     }
 
-    public function when($concrete)
-    {
-    }
-
-    public function factory($abstract)
-    {
-    }
-
-    public function flush()
+    public function loadDeferredProviders()
     {
     }
 
@@ -187,7 +147,19 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
-    public function call($callback, array $parameters = [], $defaultMethod = null)
+    public function register($provider, $force = false)
+    {
+    }
+
+    public function registerConfiguredProviders()
+    {
+    }
+
+    public function registerDeferredProvider($provider, $service = null)
+    {
+    }
+
+    public function resolveProvider($provider)
     {
     }
 
@@ -199,15 +171,55 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
-    public function afterResolving($abstract, Closure $callback = null)
+    public function resourcePath($path = '')
     {
     }
 
-    public function get($id)
+    public function runningInConsole()
     {
     }
 
-    public function has($id)
+    public function runningUnitTests()
+    {
+    }
+
+    public function setLocale($locale)
+    {
+    }
+
+    public function shouldSkipMiddleware()
+    {
+    }
+
+    public function singleton($abstract, $concrete = null)
+    {
+    }
+
+    public function singletonIf($abstract, $concrete = null)
+    {
+    }
+
+    public function storagePath()
+    {
+    }
+
+    public function tag($abstracts, $tags)
+    {
+    }
+
+    public function tagged($tag)
+    {
+    }
+
+    public function terminate()
+    {
+    }
+
+    public function version()
+    {
+    }
+
+    public function when($concrete)
     {
     }
 }

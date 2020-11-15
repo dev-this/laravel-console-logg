@@ -9,8 +9,8 @@ use DevThis\ConsoleLogg\Binder\LogOutputBinder;
 use DevThis\ConsoleLogg\Factories\FilterableConsoleLoggerFactory;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
 use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
-use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
 use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
+use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
 
@@ -55,7 +55,8 @@ class ConsoleLoggServiceProvider extends ServiceProvider
             LogManager::class,
             Closure::fromCallable(
                 [
-                    $this->app->make(LogManagerResolverListener::class), 'resolve'
+                    $this->app->make(LogManagerResolverListener::class),
+                    'resolve'
                 ]
             )
         );
