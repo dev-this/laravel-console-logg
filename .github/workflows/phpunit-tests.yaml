@@ -1,0 +1,57 @@
+name: PHPUnit suite
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'config/*'
+      - 'src/**'
+      - 'tests/**'
+      - 'phpunit.xml'
+      - 'composer.*'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'config/*'
+      - 'src/**'
+      - 'tests/**'
+      - 'phpunit.xml'
+      - 'composer.*'
+
+jobs:
+  phpunit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ 7.2, 7.3, 7.4 ]
+        #laravel: [~5.6.0, ~5.7.0, ~5.8.0, ~5.9.0, ^6.0, ^7.0, ^8.0]
+        laravel: [ ^6.0, ^7.0, ^8.0 ]
+        exclude:
+          - php: 7.2
+            laravel: ^8.0
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require "illuminate/contracts=${{ matrix.laravel }}" --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
+          composer update --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
+
+      - name: Configure matchers
+        uses: mheap/phpunit-matcher-action@v1
+
+      - name: Execute tests
+        run: vendor/bin/phpunit --teamcity

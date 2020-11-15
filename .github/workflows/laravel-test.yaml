@@ -1,8 +1,8 @@
-name: PHPUnit suite
+name: Laravel IRL tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ laravel-irl-tests ]
     paths:
       - 'config/*'
       - 'src/**'
@@ -10,7 +10,7 @@ on:
       - 'phpunit.xml'
       - 'composer.*'
   pull_request:
-    branches: [ master ]
+    branches: [ laravel-irl-tests ]
     paths:
       - 'config/*'
       - 'src/**'
@@ -19,14 +19,13 @@ on:
       - 'composer.*'
 
 jobs:
-  tests:
+  laravel-tests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: [ 7.2, 7.3, 7.4 ]
-        #laravel: [~5.6.0, ~5.7.0, ~5.8.0, ~5.9.0, ^6.0, ^7.0, ^8.0]
-        laravel: [ ^6.0, ^7.0, ^8.0 ]
+        php: [ 7.4 ] #, 7.3, 7.4 ]
+        laravel: [ ^8.0 ] # ^7.0, ^8.0 ]
         exclude:
           - php: 7.2
             laravel: ^8.0
@@ -36,6 +35,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          path: 'console-logg-package'
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -45,15 +46,16 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Install dependencies
+      - name: Setup structure
         run: |
-          composer require "illuminate/contracts=${{ matrix.laravel }}" --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
-          composer update --no-plugins --no-scripts --no-suggest --no-interaction --no-progress --prefer-dist
+          composer create-project --prefer-dist laravel/laravel:^7.0 laravel-app
+          cd laravel-app
 
-      - name: Configure matchers
-        uses: mheap/phpunit-matcher-action@v1
-
-      - name: Execute tests
-        run: vendor/bin/phpunit --teamcity
-        env:
-          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+      - name: Tesat
+        run: |
+          cd laravel-app
+          $(cat composer.json | jq '.repositories[0].type="path"') > composer.json
+          $(cat composer.json | jq '.repositories[0].url="../console-logg-package"') > composer.json
+          $(cat composer.json | jq '.require."devthis/console-logg"="*"') > composer.json
+          ls -lha
+          composer install
