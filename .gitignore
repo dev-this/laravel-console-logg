@@ -5,3 +5,4 @@
 .phpunit.result.cache
 Thumbs.db
 composer.lock
+/coverage.xml

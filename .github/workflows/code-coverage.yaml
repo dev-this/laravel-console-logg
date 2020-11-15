@@ -2,9 +2,11 @@ name: tests
 
 on:
   push:
-    branches: [ master, test ]
-  pull_request:
-    branches: [ master, test ]
+    paths:
+      - 'src/**'
+      - 'phpunit.xml'
+      - 'composer.*'
+      - 'config/*'
 
 jobs:
   code-cov:
