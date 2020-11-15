@@ -48,7 +48,6 @@ class LogOutputBinderTest extends TestCase
         $defaultDriver = ['driver' => 'the-default'];
         $app = new ApplicationFake(['config' => ['logging.default' => $defaultDriver]]);
         $logManager = new LogManagerSpy($app);
-        $expected = $filterableConsoleLoggerFactory->getLastCreated();
 
         $logOutputBinder->attach($commandStarting, $logManager);
 

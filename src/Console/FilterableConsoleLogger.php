@@ -12,11 +12,16 @@ class FilterableConsoleLogger extends ConsoleLogger implements FilterableConsole
     /**
      * @var bool
      */
-    private $isFiltered = false;
+    private $filtering = false;
+
+    public function isFiltered(): bool
+    {
+        return $this->filtering;
+    }
 
     public function log($level, $message, array $context = []): void
     {
-        if ($this->isFiltered === true && ($context['logg'] ?? false) === true) {
+        if ($this->filtering === true && ($context['logg'] ?? false) !== true) {
             return;
         }
 
@@ -26,9 +31,9 @@ class FilterableConsoleLogger extends ConsoleLogger implements FilterableConsole
     /**
      * @inheritDoc
      */
-    public function setFiltered(bool $isFiltered): FilterableConsoleLoggerInterface
+    public function setFiltering(bool $isFiltered): FilterableConsoleLoggerInterface
     {
-        $this->isFiltered = $isFiltered;
+        $this->filtering = $isFiltered;
 
         return $this;
     }

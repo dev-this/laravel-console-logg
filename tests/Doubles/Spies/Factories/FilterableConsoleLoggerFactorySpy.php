@@ -15,13 +15,36 @@ class FilterableConsoleLoggerFactorySpy extends FilterableConsoleLoggerFactory
      */
     private $lastCreated;
 
+    /**
+     * @vars bool|null
+     */
+    private $lastIsFiltered;
+
+    /**
+     * @var OutputInterface
+     */
+    private $lastOutput;
+
     public function create(OutputInterface $output, ?bool $isFiltered = null): FilterableConsoleLoggerInterface
     {
+        $this->lastIsFiltered = $isFiltered;
+        $this->lastOutput = $output;
+
         return $this->lastCreated = parent::create($output, $isFiltered);
     }
 
     public function getLastCreated(): ?FilterableConsoleLoggerInterface
     {
         return $this->lastCreated;
+    }
+
+    public function getLastIsFilteredValue(): ?bool
+    {
+        return $this->lastIsFiltered;
+    }
+
+    public function getLastOutput(): OutputInterface
+    {
+        return $this->lastOutput;
     }
 }

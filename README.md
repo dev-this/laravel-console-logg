@@ -95,37 +95,40 @@ Unit tests ensure type-compatibility, expected behaviour is met & compatibility 
 ---
 # Features
 
-## Works out of the box
+## Literally Effortless
 
-There are no traits, classes, interfaces that you need to use. ConsoleLogg does not require any custom code for usage.
+Your application **will not be coupled** with ConsoleLogg.
 
-There are some [configurable properties](#configurable), but they are optional.
+There are no traits, classes, interfaces that you need to use. ConsoleLogg does not require any custom code, it just works.
 
-## Zero config
-
-ConsoleLogg service provider will be automatically added as a provider for your application.
-
-However, if installed with `composer require --no-scripts` you will need to manually add the provider into
-your `config/app.php`
-
+The ConsoleLog Service Provider should be automatically added to your app, but if it hasn't, you can add it yourself to `config/app.php`
 ```php
+// generally only required when you have composer intalled with --no-scripts
+
 'providers' => [
     //...
     \DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider::class,
 ];
 ```
 
-## Configurable
+## Settings
 
 See [config/console-logg.php](config/console-logg.php) for the raw configuration file
 
 ### Filtering
 
-_Documentation to come_
+> default = `false`
 
-### Extend
+If you choose to enable filtering, logs will only be output to artisan console commands if they have the context property `logg` set to `true`
 
-_Documentation to come_
+eg.
+
+```php
+logger()->info("Informative message #1", ['logg' => true]);
+logger()->alert("Nice one");
+```
+
+With these logs being invoked by your artisan command, only `[info] Informative message #1` will be output
 
 ## Command-in-command
 

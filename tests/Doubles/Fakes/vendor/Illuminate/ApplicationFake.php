@@ -12,7 +12,7 @@ class ApplicationFake extends ArrayObject implements Application
 {
     public function __construct(?array $array = null)
     {
-        parent::__construct($array);
+        parent::__construct($array ?? []);
     }
 
     public function addContextualBinding($concrete, $abstract, $implementation)
@@ -69,6 +69,7 @@ class ApplicationFake extends ArrayObject implements Application
 
     public function configPath($path = '')
     {
+        return '%APP%/' . $path;
     }
 
     public function configurationIsCached()

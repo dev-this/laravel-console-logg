@@ -8,11 +8,13 @@ use Psr\Log\LoggerInterface;
 
 interface FilterableConsoleLoggerInterface extends LoggerInterface
 {
+    public function isFiltered(): bool;
+
     /**
      * Sets the state for whether log filtering (by context) is enabled
      * 'logg' => true should
      *
      * @return \DevThis\ConsoleLogg\Interfaces\Console\FilterableConsoleLoggerInterface
      */
-    public function setFiltered(bool $isFiltered): FilterableConsoleLoggerInterface;
+    public function setFiltering(bool $isFiltered): FilterableConsoleLoggerInterface;
 }

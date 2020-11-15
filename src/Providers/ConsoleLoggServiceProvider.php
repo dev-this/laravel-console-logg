@@ -25,7 +25,7 @@ class ConsoleLoggServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__ . '/../../config/console-logg.php' => config_path('console-logg.php')
+                __DIR__ . '/../../config/console-logg.php' => $this->app->configPath('console-logg.php')
             ],
             'config'
         );

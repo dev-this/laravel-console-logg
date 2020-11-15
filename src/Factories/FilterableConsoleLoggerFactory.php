@@ -14,6 +14,6 @@ class FilterableConsoleLoggerFactory implements FilterableConsoleLoggerFactoryIn
     public function create(OutputInterface $output, ?bool $isFiltered = null): FilterableConsoleLoggerInterface
     {
         return (new FilterableConsoleLogger($output))
-            ->setFiltered($isFiltered ?? false);
+            ->setFiltering($isFiltered ?? false);
     }
 }
