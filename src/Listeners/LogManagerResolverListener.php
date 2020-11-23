@@ -11,6 +11,7 @@ use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Log\LogManager;
+use Symfony\Component\Console\Output\StreamOutput;
 
 class LogManagerResolverListener implements LogManagerResolverListenerInterface
 {
@@ -35,18 +36,31 @@ class LogManagerResolverListener implements LogManagerResolverListenerInterface
      */
     public function handle(LogManager $logManager, Application $application): void
     {
+        if ($this->isCliServer() === true) {
+            // Parent process forwards standard output
+            $output = new StreamOutput(\fopen('php://stdout', 'wb'));
+            $this->logOutputBinder->attach($output, $logManager);
+
+            return;
+        }
+
         $this->eventDispatcher->listen(
             CommandStarting::class,
             function (CommandStarting $event) use ($logManager) {
-                $this->logOutputBinder->attach($event, $logManager);
+                $this->logOutputBinder->attach($event->output, $logManager);
             }
         );
 
         $this->eventDispatcher->listen(
             CommandFinished::class,
             function (CommandFinished $event) use ($logManager) {
-                $this->logOutputBinder->detach($event, $logManager);
+                $this->logOutputBinder->detach($logManager);
             }
         );
+    }
+
+    protected function isCliServer(): bool
+    {
+        return PHP_SAPI === 'cli-server';
     }
 }

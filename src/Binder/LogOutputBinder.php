@@ -6,10 +6,9 @@ namespace DevThis\ConsoleLogg\Binder;
 
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
 use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
-use Illuminate\Console\Events\CommandFinished;
-use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Responsible for binding a ConsoleLogger instance with the built-in Laravel Logger, and removing
@@ -39,12 +38,12 @@ class LogOutputBinder implements LogOutputBindedInterface
         $this->consoleLoggerFactory = $consoleLoggerFactory;
     }
 
-    public function attach(CommandStarting $commandEvent, LogManager $logManager): void
+    public function attach(OutputInterface $output, LogManager $logManager): void
     {
         $this->defaultDriver = $logManager->getDefaultDriver();
         $logManager->setDefaultDriver('console-logg');
 
-        $consoleLogger = $this->consoleLoggerFactory->create($commandEvent->output, $this->isFiltered);
+        $consoleLogger = $this->consoleLoggerFactory->create($output, $this->isFiltered);
 
         $logManager->extend(
             'console-logg',
@@ -54,7 +53,7 @@ class LogOutputBinder implements LogOutputBindedInterface
         );
     }
 
-    public function detach(CommandFinished $commandFinished, LogManager $logManager): void
+    public function detach(LogManager $logManager): void
     {
         $logManager->forgetChannel('console-logg');
         $logManager->setDefaultDriver($this->defaultDriver);
