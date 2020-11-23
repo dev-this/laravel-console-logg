@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\StreamOutput;
 use Tests\Doubles\Fakes\vendor\Illuminate\ApplicationFake;
 use Tests\Doubles\Fakes\vendor\Illuminate\EventDispatcherFake;
 use Tests\Doubles\Spies\Binder\LogOutputBinderFake;
-use Tests\Doubles\Spies\Factories\FilterableConsoleLoggerFactorySpy;
+use Tests\Doubles\Spies\Factories\ConsoleLoggerFactorySpy;
 use Tests\Doubles\Stubs\vendor\Illuminate\LogManagerStub;
 use Tests\Doubles\Stubs\vendor\Illuminate\RepositoryStub;
 
@@ -69,7 +69,7 @@ class LogManagerResolverListenerTest extends TestCase
     public function testEventDispatcherListensTo(string $eventClass): void
     {
         $eventDispatcher = new EventDispatcherFake();
-        $filterableConsoleFactory = new FilterableConsoleLoggerFactorySpy();
+        $filterableConsoleFactory = new ConsoleLoggerFactorySpy();
         $config = new RepositoryStub();
         $logOutputBinder = new LogOutputBinder($filterableConsoleFactory, $config);
         $logManagerResolverListener = new LogManagerResolverListener($eventDispatcher, $logOutputBinder);

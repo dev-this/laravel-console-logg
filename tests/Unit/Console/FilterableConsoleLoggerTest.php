@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Console;
 
-use DevThis\ConsoleLogg\Console\FilterableConsoleLogger;
+use DevThis\ConsoleLogg\Console\ConsoleLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @covers \DevThis\ConsoleLogg\Console\FilterableConsoleLogger
+ * @covers \DevThis\ConsoleLogg\Console\ConsoleLogger
  */
 class FilterableConsoleLoggerTest extends TestCase
 {
@@ -93,7 +93,7 @@ expect
     public function testDefaultIsFilteredIsFalse(): void
     {
         $output = new BufferedOutput();
-        $filterableConsoleLogger = new FilterableConsoleLogger(
+        $filterableConsoleLogger = new ConsoleLogger(
             $output,
             [LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,]
         );
@@ -109,7 +109,7 @@ expect
     public function testFilteringRespectsBeingEnabled(): void
     {
         $output = new NullOutput();
-        $filterableConsoleLogger = new FilterableConsoleLogger($output);
+        $filterableConsoleLogger = new ConsoleLogger($output);
         $filterableConsoleLogger->setFiltering(true);
 
         self::assertTrue($filterableConsoleLogger->isFiltered());
@@ -118,7 +118,7 @@ expect
     public function testIsFilteredIsFalseByDefault(): void
     {
         $output = new NullOutput();
-        $filterableConsoleLogger = new FilterableConsoleLogger($output);
+        $filterableConsoleLogger = new ConsoleLogger($output);
 
         self::assertFalse($filterableConsoleLogger->isFiltered());
     }
@@ -126,7 +126,7 @@ expect
     public function testIsFilteredIsTruthfulWhenFalse(): void
     {
         $output = new NullOutput();
-        $filterableConsoleLogger = new FilterableConsoleLogger($output);
+        $filterableConsoleLogger = new ConsoleLogger($output);
         $filterableConsoleLogger->setFiltering(false);
 
         self::assertFalse($filterableConsoleLogger->isFiltered());
@@ -138,7 +138,7 @@ expect
     public function testLogRespectsFilteredOption(array $logs, bool $isFiltered, string $expectation): void
     {
         $output = new BufferedOutput();
-        $filterableConsoleLogger = (new FilterableConsoleLogger(
+        $filterableConsoleLogger = (new ConsoleLogger(
             $output,
             [
                 LogLevel::EMERGENCY => OutputInterface::VERBOSITY_NORMAL,

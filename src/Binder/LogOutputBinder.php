@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace DevThis\ConsoleLogg\Binder;
 
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
-use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
+use DevThis\ConsoleLogg\Interfaces\Console\ConsoleLoggerInterface;
+use DevThis\ConsoleLogg\Interfaces\Factories\ConsoleLoggerFactoryInterface;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Log\LogManager;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class LogOutputBinder implements LogOutputBindedInterface
 {
     /**
-     * @var FilterableConsoleLoggerFactoryInterface
+     * @var ConsoleLoggerFactoryInterface
      */
     private $consoleLoggerFactory;
 
@@ -32,7 +33,7 @@ class LogOutputBinder implements LogOutputBindedInterface
      */
     private $isFiltered;
 
-    public function __construct(FilterableConsoleLoggerFactoryInterface $consoleLoggerFactory, Repository $config)
+    public function __construct(ConsoleLoggerFactoryInterface $consoleLoggerFactory, Repository $config)
     {
         $this->isFiltered = $config->get('console-logg.filtered') === true;
         $this->consoleLoggerFactory = $consoleLoggerFactory;
@@ -43,7 +44,7 @@ class LogOutputBinder implements LogOutputBindedInterface
         $this->defaultDriver = $logManager->getDefaultDriver();
         $logManager->setDefaultDriver('console-logg');
 
-        $consoleLogger = $this->consoleLoggerFactory->create($output, $this->isFiltered);
+        $consoleLogger = $this->createConsoleLogger($output);
 
         $logManager->extend(
             'console-logg',
@@ -57,5 +58,14 @@ class LogOutputBinder implements LogOutputBindedInterface
     {
         $logManager->forgetChannel('console-logg');
         $logManager->setDefaultDriver($this->defaultDriver);
+    }
+
+    private function createConsoleLogger(OutputInterface $output): ConsoleLoggerInterface
+    {
+        if ($this->isFiltered === true) {
+            return $this->consoleLoggerFactory->createFilterable($output);
+        }
+
+        return $this->consoleLoggerFactory->create($output);
     }
 }

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Tests\Unit\Binder;
 
 use DevThis\ConsoleLogg\Binder\LogOutputBinder;
+use DevThis\ConsoleLogg\Interfaces\Console\ConsoleLoggerInterface;
 use Illuminate\Log\LogManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\NullOutput;
 use Tests\Doubles\Fakes\vendor\Illuminate\ApplicationFake;
-use Tests\Doubles\Spies\Factories\FilterableConsoleLoggerFactorySpy;
+use Tests\Doubles\Spies\Factories\ConsoleLoggerFactorySpy;
 use Tests\Doubles\Spies\vendor\Illuminate\LogManagerSpy;
+use Tests\Doubles\Stubs\vendor\Illuminate\RepositoryFilterableStub;
 use Tests\Doubles\Stubs\vendor\Illuminate\RepositoryStub;
 
 /**
@@ -21,7 +23,7 @@ class LogOutputBinderTest extends TestCase
     public function testAttachSetsDefaultDriver(): void
     {
         $config = new RepositoryStub();
-        $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
+        $filterableConsoleLoggerFactory = new ConsoleLoggerFactorySpy();
         $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
         $output = new NullOutput();
         $app = new ApplicationFake(['config' => ['logging.default' => ['driver' => 'the-default']]]);
@@ -36,7 +38,7 @@ class LogOutputBinderTest extends TestCase
     public function testAttachedConsoleLoggerRespectsFilteredOption(): void
     {
         $config = new RepositoryStub();
-        $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
+        $filterableConsoleLoggerFactory = new ConsoleLoggerFactorySpy();
         $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
         $output = new NullOutput();
         $defaultDriver = ['driver' => 'the-default'];
@@ -51,10 +53,34 @@ class LogOutputBinderTest extends TestCase
         );
     }
 
+    public function testCreatingFilterableConsoleLogger(): void
+    {
+        $config = new RepositoryFilterableStub();
+        $filterableConsoleLoggerFactory = new ConsoleLoggerFactorySpy();
+        $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
+        $output = new NullOutput();
+        $app = new ApplicationFake(
+            [
+                'config' => [
+                    'logging.default' => ['driver' => 'the-default'],
+                    'logging.channels.console-logg' => ['driver' => 'console-logg']
+                ]
+            ]
+        );
+        $logManager = new LogManager($app);
+        $logOutputBinder->attach($output, $logManager);
+
+        /** @var ConsoleLoggerInterface|mixed $driver */
+        $driver = $logManager->driver()->getLogger();
+
+        self::assertInstanceOf(ConsoleLoggerInterface::class, $driver);
+        self::assertTrue($driver->isFiltered());
+    }
+
     public function testDefaultDriverAfterDetachIsNotConsoleLogg(): void
     {
         $config = new RepositoryStub();
-        $filterableConsoleLoggerFactory = new FilterableConsoleLoggerFactorySpy();
+        $filterableConsoleLoggerFactory = new ConsoleLoggerFactorySpy();
         $logOutputBinder = new LogOutputBinder($filterableConsoleLoggerFactory, $config);
         $output = new NullOutput();
         $defaultDriver = ['driver' => 'the-default'];
