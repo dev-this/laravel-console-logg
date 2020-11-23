@@ -16,6 +16,7 @@ Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components
 - [Install](#Install)
     - [Compatibility](#compatibility)
 - [Features](#features)
+    - [Artisan serve supported](#artisan-serve-supported)
     - [Literally Effortless](#literally-effortless)
     - [Command-in-command](#command-in-command)
 - [Light footprint](#light-footprint)
