@@ -94,6 +94,9 @@ Unit tests ensure type-compatibility, expected behaviour is met & compatibility 
 ---
 # Features
 
+## Artisan serve supported
+Logger output will be shown in your local development server console.
+
 ## Literally Effortless
 
 Your application **will not be coupled** with ConsoleLogg.
