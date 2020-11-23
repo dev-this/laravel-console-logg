@@ -40,7 +40,8 @@ class ConsoleLoggServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->runningInConsole() === false) {
+        // Support built-in PHP dev server or console kernel
+        if (PHP_SAPI !== 'cli-server' && $this->app->runningInConsole() === false) {
             return;
         }
 
