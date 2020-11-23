@@ -6,9 +6,9 @@ namespace DevThis\ConsoleLogg\Providers;
 
 use Closure;
 use DevThis\ConsoleLogg\Binder\LogOutputBinder;
-use DevThis\ConsoleLogg\Factories\FilterableConsoleLoggerFactory;
+use DevThis\ConsoleLogg\Factories\ConsoleLoggerFactory;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
-use DevThis\ConsoleLogg\Interfaces\Factories\FilterableConsoleLoggerFactoryInterface;
+use DevThis\ConsoleLogg\Interfaces\Factories\ConsoleLoggerFactoryInterface;
 use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
 use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
 use Illuminate\Log\LogManager;
@@ -47,7 +47,7 @@ class ConsoleLoggServiceProvider extends ServiceProvider
 
         $this->app->singleton(LogOutputBindedInterface::class, LogOutputBinder::class);
         $this->app->singleton(LogManagerResolverListenerInterface::class, LogManagerResolverListener::class);
-        $this->app->singleton(FilterableConsoleLoggerFactoryInterface::class, FilterableConsoleLoggerFactory::class);
+        $this->app->singleton(ConsoleLoggerFactoryInterface::class, ConsoleLoggerFactory::class);
 
         // sorry for this hack :(
         $this->app['config']['logging.channels.console-logg'] = ['driver' => 'console-logg'];

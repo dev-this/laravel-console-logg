@@ -6,7 +6,7 @@ namespace DevThis\ConsoleLogg\Interfaces\Console;
 
 use Psr\Log\LoggerInterface;
 
-interface FilterableConsoleLoggerInterface extends LoggerInterface
+interface ConsoleLoggerInterface extends LoggerInterface
 {
     public function isFiltered(): bool;
 
@@ -14,7 +14,7 @@ interface FilterableConsoleLoggerInterface extends LoggerInterface
      * Sets the state for whether log filtering (by context) is enabled
      * 'logg' => true should
      *
-     * @return \DevThis\ConsoleLogg\Interfaces\Console\FilterableConsoleLoggerInterface
+     * @return \DevThis\ConsoleLogg\Interfaces\Console\ConsoleLoggerInterface
      */
-    public function setFiltering(bool $isFiltered): FilterableConsoleLoggerInterface;
+    public function setFiltering(bool $isFiltered): ConsoleLoggerInterface;
 }

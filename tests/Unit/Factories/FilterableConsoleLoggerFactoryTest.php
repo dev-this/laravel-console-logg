@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Factories;
 
-use DevThis\ConsoleLogg\Console\FilterableConsoleLogger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\NullOutput;
-use Tests\Doubles\Spies\Factories\FilterableConsoleLoggerFactorySpy;
+use Tests\Doubles\Spies\Factories\ConsoleLoggerFactorySpy;
 
 /**
- * @covers \DevThis\ConsoleLogg\Factories\FilterableConsoleLoggerFactory
+ * @covers \DevThis\ConsoleLogg\Factories\ConsoleLoggerFactory
  */
 class FilterableConsoleLoggerFactoryTest extends TestCase
 {
@@ -25,11 +24,6 @@ class FilterableConsoleLoggerFactoryTest extends TestCase
             'isFiltered' => false,
             'filteredExpectation' => false
         ];
-
-        yield 'is filtered provided null' => [
-            'isFiltered' => null,
-            'filteredExpectation' => null
-        ];
     }
 
     /**
@@ -40,16 +34,13 @@ class FilterableConsoleLoggerFactoryTest extends TestCase
      *
      * @dataProvider getInputsForTestingArguments
      */
-    public function testCreateRespectsArguments(?bool $isFiltered, ?bool $filteredExpectation): void
+    public function testCreateRespectsArguments(bool $isFiltered, bool $filteredExpectation): void
     {
-        $factory = new FilterableConsoleLoggerFactorySpy();
+        $factory = new ConsoleLoggerFactorySpy();
         $output = new NullOutput();
-        $consoleLogger = $factory->create($output, $isFiltered);
 
-        // feels bad using a spy, but it's impossible to gauge this without
-        self::assertSame($output, $factory->getLastOutput());
-        self::assertSame($filteredExpectation, $factory->getLastIsFilteredValue());
-        // weak assertion but still valid because we only know it returns the interface, not concrete
-        self::assertInstanceOf(FilterableConsoleLogger::class, $consoleLogger);
+        $consoleLogger = $isFiltered === true ? $factory->createFilterable($output) : $factory->create($output);
+
+        self::assertSame($filteredExpectation, $consoleLogger->isFiltered());
     }
 }

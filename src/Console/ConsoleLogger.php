@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DevThis\ConsoleLogg\Console;
 
-use DevThis\ConsoleLogg\Interfaces\Console\FilterableConsoleLoggerInterface;
-use Symfony\Component\Console\Logger\ConsoleLogger;
+use DevThis\ConsoleLogg\Interfaces\Console\ConsoleLoggerInterface;
+use Symfony\Component\Console\Logger\ConsoleLogger as SymfonyConsoleLogger;
 
-class FilterableConsoleLogger extends ConsoleLogger implements FilterableConsoleLoggerInterface
+class ConsoleLogger extends SymfonyConsoleLogger implements ConsoleLoggerInterface
 {
     /**
      * @var bool
@@ -31,7 +31,7 @@ class FilterableConsoleLogger extends ConsoleLogger implements FilterableConsole
     /**
      * @inheritDoc
      */
-    public function setFiltering(bool $isFiltered): FilterableConsoleLoggerInterface
+    public function setFiltering(bool $isFiltered): ConsoleLoggerInterface
     {
         $this->filtering = $isFiltered;
 
