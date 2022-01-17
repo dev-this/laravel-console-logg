@@ -9,6 +9,5 @@ putenv('LOG_CHANNEL=console-logg');
 require __DIR__ . '/../../../laravel-app/artisan';
 
 --EXPECT--
-#!/usr/bin/env php
 [emergency] nice
 [alert] cool
