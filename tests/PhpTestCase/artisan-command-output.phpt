@@ -8,5 +8,6 @@ $_SERVER['argv'][1] = 'console-logg:test';
 require __DIR__ . '/../../../laravel-app/artisan';
 
 --EXPECT--
+#!/usr/bin/env php
 [emergency] nice
 [alert] cool
