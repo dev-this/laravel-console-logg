@@ -52,12 +52,11 @@ jobs:
       - name: Add local path composer dependency
         run: |
           cd laravel-app
-          jq '.repositories[0].type="path"' composer.json > composer.temp.json
-          jq '.repositories[0].url="../console-logg-package"' composer.json > composer.temp.json
-          jq '.require."devthis/console-logg"="*"' composer.json > composer.temp.json
-          jq '.require."psr/log"="1.1.4"' composer.json > composer.temp.json
-          jq '.config.platform.php="${{ matrix.php }}"' composer.json > composer.temp.json
-          mv composer.temp.json composer.json
+          cat <<< $(jq '.repositories[0].type="path"' composer.json) > composer.json
+          cat <<< $(jq '.repositories[0].url="../console-logg-package"' composer.json) > composer.json
+          cat <<< $(jq '.require."devthis/console-logg"="*"' composer.json) > composer.json
+          cat <<< $(jq '.require."psr/log"="1.1.4"' composer.json) > composer.json
+          cat <<< $(jq '.config.platform.php="${{ matrix.php }}"' composer.json) > composer.json
           cat composer.json
           composer update --no-interaction --no-progress --ignore-platform-reqs
 
