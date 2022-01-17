@@ -71,6 +71,8 @@ jobs:
       - name: Run Laravel package discovery
         run: |
           cd laravel-app
+          ls -lha
+          composer dump-autoload
           php artisan package:discover --ansi
           php artisan clear-compiled
 
