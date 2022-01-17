@@ -27,7 +27,7 @@ Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components
 
 # What does it do?
 
-**Adds support for logger messages to be redirected for console command output**
+**Logger channel for sharing messages between application and console commands**
 
 Typically, this requires a hacky solution, such as coupling your shared services with a console logger, or configuring
 multiple driver channels.
@@ -79,29 +79,11 @@ php artisan my:command -vvv
 | Compatible         | Laravel   | PHP       |
 |--------------------|-----------|-----------|
 | :heavy_check_mark: | 8.*       | PHP >=7.1 + 8.* |
-| :heavy_check_mark: | 7.*       | PHP >=7.1 + 8.* |
-| :heavy_check_mark: | 6.*       | PHP >=7.1 + 8.* |
-
-#### Compatibility assurance
-
-<details>
-  <summary>Click to find out how we ensure compatibility</summary>
-
-Compatibility is thoroughly tested using a combination of real world tests (functional), and unit tests
-
-[ConsoleLogg test suite](/test) is run in isolation
-
-- Using PHP 7.1, 7.2, 7.3,
-  7.4, [each major version of Laravel is independently tested against](actions?query=workflow%3A"PHPUnit+suite")
-- _Laravel 5.6, 5.7 & 5.8 are tested individually on top of this_
-
-Unit tests ensure type-compatibility, expected behaviour is met & compatibility with each version of Laravel contracts
-
-[TODO] Functional tests ensure real world expectations are through a real Laravel application
-
-</details>
+| :heavy_check_mark: | 7.*       | PHP >=7.1 |
+| :heavy_check_mark: | 6.*       | PHP >=7.1 |
 
 ---
+
 # Features
 
 ## Artisan serve supported
@@ -140,7 +122,7 @@ class MyConsoleApp extends Command
 
     public function handle(): int
     {
-        //other:command may invoke servies that use the Laravel Logger
+        //other:command may invoke services that use the Laravel Logger
         //these logs will still output to this current console
         $this->call('other:command');
         //...
