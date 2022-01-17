@@ -55,9 +55,9 @@ jobs:
           jq '.repositories[0].type="path"' composer.json > composer.temp.json
           jq '.repositories[0].url="../console-logg-package"' composer.json > composer.temp.json
           jq '.require."devthis/console-logg"="*"' composer.json > composer.temp.json
+          jq '.require."psr/log"="1.1.4"' composer.json > composer.temp.json
           mv composer.temp.json composer.json
           composer update --no-interaction --no-progress --ignore-platform-reqs
-          composer require psr/log 1.1.4 --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
 
       - name: Copy fixtures into Laravel app
         run: |
