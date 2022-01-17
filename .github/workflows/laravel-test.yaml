@@ -59,8 +59,6 @@ jobs:
           cat <<< $(jq -n --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
           cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
           cat <<< $(jq '.require.php="^${{ matrix.php }}"' composer.json) > composer.json
-          cat composer.json
-          composer update --no-interaction --no-progress --with-all-dependencies
 
       - name: Copy fixtures into Laravel app
         run: |
@@ -72,7 +70,8 @@ jobs:
         run: |
           cd laravel-app
           ls -lha
-          composer dump-autoload
+          cat composer.json
+          composer install --no-interaction --no-progress --with-all-dependencies
           php artisan package:discover --ansi
           php artisan clear-compiled
 
