@@ -52,6 +52,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "illuminate/contracts=${{ matrix.laravel }}" --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
+          composer require psr/log 1.1.4 --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
           composer update --no-plugins --no-scripts --no-interaction --no-progress --prefer-dist
 
       - name: Configure matchers
