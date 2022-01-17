@@ -11,4 +11,5 @@ require __DIR__ . '/../../../laravel-app/artisan';
 --EXPECT--
 #!/usr/bin/env php
 [emergency] nice
+[info] and
 [alert] cool
