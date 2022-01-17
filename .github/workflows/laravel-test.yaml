@@ -51,11 +51,12 @@ jobs:
       - name: Add local path composer dependency
         run: |
           cd laravel-app
+          export PHPV=$(php -r 'echo phpversion();')
           cat <<< $(jq '.repositories[0].type="path"' composer.json) > composer.json
           cat <<< $(jq '.repositories[0].url="../console-logg-package"' composer.json) > composer.json
           cat <<< $(jq '.require."devthis/console-logg"="*"' composer.json) > composer.json
           cat <<< $(jq '.require."psr/log"="1.1.4"' composer.json) > composer.json
-          cat <<< $(jq '.config.platform.php="${{ matrix.php }}.*"' composer.json) > composer.json
+          cat <<< $(jq -n --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
           cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
           cat <<< $(jq '.require.php="^${{ matrix.php }}"' composer.json) > composer.json
           cat composer.json
