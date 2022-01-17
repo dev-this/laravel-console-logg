@@ -27,16 +27,16 @@ Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components
 
 # What does it do?
 
-**ConsoleLogg provides output messages for your artisan commands, between your shared code which is using the built-in
-Laravel logger**
+**Adds support for logger messages to be redirected for console command output**
 
 Typically, this requires a hacky solution, such as coupling your shared services with a console logger, or configuring
 multiple driver channels.
 
 With ConsoleLogg you can have logs for your artisan commands, and behave as usual with http/controllers.
 
-**Use your Laravel logger throughout your application shared services as usual**
+**No code changes are required with logger usage**
 
+Supported:
 - _Dependency Injection/autowiring_ `LoggerInterface $logger` & `$logger->debug("yeet")`
 - `logger()->critical("Send help")`
 - `Log::alert("She find pictures in my email")`
@@ -57,21 +57,30 @@ php artisan my:command -vvv
 
     ```shell script
    composer require devthis/console-logg
-   
-   # to optionally copy config
-   php artisan vendor:publish --provider="DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider"
-    ```
+   ```
+
+2. Enable logging channel `console-logg`
+
+`config/logging.php`
+```diff
+    'channels' => [
+        'stack' => [
+            'driver' => 'stack',
+-            'channels' => ['single'],
++            'channels' => ['console-logg', 'single'],
+            'ignore_exceptions' => false,
+        ],
+```
+
+[Laravel - Logging Docs](https://laravel.com/docs/8.x/logging#building-log-stacks)
 
 ### Compatibility
 
 | Compatible         | Laravel   | PHP       |
 |--------------------|-----------|-----------|
-| :heavy_check_mark: | 8.*       | PHP >=7.1 |
-| :heavy_check_mark: | 7.*       | PHP >=7.1 |
-| :heavy_check_mark: | 6.*       | PHP >=7.1 |
-| :heavy_exclamation_mark: :soon: | > 5.6     | PHP >=7.1 |
-
-**PHP 8 compatibility is currently being tested**
+| :heavy_check_mark: | 8.*       | PHP >=7.1 + 8.* |
+| :heavy_check_mark: | 7.*       | PHP >=7.1 + 8.* |
+| :heavy_check_mark: | 6.*       | PHP >=7.1 + 8.* |
 
 #### Compatibility assurance
 
@@ -106,32 +115,13 @@ There are no traits, classes, interfaces that you need to use. ConsoleLogg does 
 
 The ConsoleLog Service Provider should be automatically added to your app, but if it hasn't, you can add it yourself to `config/app.php`
 ```php
-// generally only required when you have composer intalled with --no-scripts
+// generally only required when you have composer installed with --no-scripts
 
 'providers' => [
     //...
     \DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider::class,
 ];
 ```
-
-## Settings
-
-See [config/console-logg.php](config/console-logg.php) for the raw configuration file
-
-### Filtering
-
-> default = `false`
-
-If you choose to enable filtering, logs will only be output to artisan console commands if they have the context property `logg` set to `true`
-
-eg.
-
-```php
-logger()->info("Informative message #1", ['logg' => true]);
-logger()->alert("Nice one");
-```
-
-With these logs being invoked by your artisan command, only `[info] Informative message #1` will be output
 
 ## Command-in-command
 
