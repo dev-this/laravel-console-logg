@@ -9,7 +9,9 @@ if (version_compare(PHP_VERSION, '8.0.0', '<')) {
 // PHPUnit later versions started to replace this header string
 // Testing across multiple PHP versions means sometimes PHPUnit version will be older, and not have the str replace
 // Hence why the output is here when PHP < 8.0
-fwrite(STDOUT, "#!/usr/bin/env php\n");
+$out = fopen('php://output', 'w'); //output handler
+fputs($out, "#!/usr/bin/env php\n");
+fclose($out);
 }
 
 require __DIR__ . '/../../../laravel-app/artisan';
