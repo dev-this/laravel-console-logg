@@ -77,6 +77,13 @@ jobs:
           php artisan clear-compiled
 
       - name: Run PHPT
+        if: matrix.php != '8.0'
         run: |
           cd console-logg-package
-          vendor/bin/phpunit tests/PhpTestCase/ --testdox
+          vendor/bin/phpunit tests/PhpTestCase/artisan-command-output.phpt --testdox
+
+      - name: Run PHPT
+        if: matrix.php == '8.0'
+        run: |
+          cd console-logg-package
+          vendor/bin/phpunit tests/PhpTestCase/artisan-command-output-php8.phpt --testdox
