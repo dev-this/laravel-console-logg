@@ -59,7 +59,7 @@ jobs:
           cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
           cat <<< $(jq '.require.php="^${{ matrix.php }}"' composer.json) > composer.json
           cat composer.json
-          composer update --no-interaction --no-progress --ignore-platform-reqs
+          composer update --no-interaction --no-progress --with-all-dependencies
 
       - name: Copy fixtures into Laravel app
         run: |
