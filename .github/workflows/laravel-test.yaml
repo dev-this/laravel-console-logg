@@ -64,7 +64,7 @@ jobs:
           cat <<< $(jq '.require."psr/log"="1.1.4"' composer.json) > composer.json
           cat composer.json
 
-          cat <<< $(jq -n --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
+          cat <<< $(jq --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
           cat composer.json
 
           cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
