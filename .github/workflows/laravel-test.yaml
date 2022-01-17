@@ -53,25 +53,12 @@ jobs:
           cd laravel-app
           export PHPV=$(php -r "echo implode('.', [PHP_MAJOR_VERSION, PHP_MINOR_VERSION, PHP_RELEASE_VERSION]);")
           cat <<< $(jq '.repositories[0].type="path"' composer.json) > composer.json
-          cat composer.json
-
           cat <<< $(jq '.repositories[0].url="../console-logg-package"' composer.json) > composer.json
-          cat composer.json
-
           cat <<< $(jq '.require."devthis/console-logg"="*"' composer.json) > composer.json
-          cat composer.json
-
           cat <<< $(jq '.require."psr/log"="1.1.4"' composer.json) > composer.json
-          cat composer.json
-
           cat <<< $(jq --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
-          cat composer.json
-
           cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
-          cat composer.json
-
           cat <<< $(jq '.require.php="^${{ matrix.php }}"' composer.json) > composer.json
-          cat composer.json
 
 
       - name: Copy fixtures into Laravel app
@@ -85,7 +72,7 @@ jobs:
           cd laravel-app
           ls -lha
           cat composer.json
-          composer install --no-interaction --no-progress
+          composer update --no-interaction --no-progress
           php artisan package:discover --ansi
           php artisan clear-compiled
 
