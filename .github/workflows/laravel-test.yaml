@@ -71,7 +71,7 @@ jobs:
           cd laravel-app
           ls -lha
           cat composer.json
-          composer install --no-interaction --no-progress --with-all-dependencies
+          composer install --no-interaction --no-progress
           php artisan package:discover --ansi
           php artisan clear-compiled
 
