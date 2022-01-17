@@ -27,16 +27,16 @@ Powered by [Symfony's Console Logger](https://symfony.com/doc/current/components
 
 # What does it do?
 
-**ConsoleLogg provides output messages for your artisan commands, between your shared code which is using the built-in
-Laravel logger**
+**Logger channel for sharing messages between application and console commands**
 
 Typically, this requires a hacky solution, such as coupling your shared services with a console logger, or configuring
 multiple driver channels.
 
 With ConsoleLogg you can have logs for your artisan commands, and behave as usual with http/controllers.
 
-**Use your Laravel logger throughout your application shared services as usual**
+**No code changes are required with logger usage**
 
+Supported:
 - _Dependency Injection/autowiring_ `LoggerInterface $logger` & `$logger->debug("yeet")`
 - `logger()->critical("Send help")`
 - `Log::alert("She find pictures in my email")`
@@ -57,42 +57,33 @@ php artisan my:command -vvv
 
     ```shell script
    composer require devthis/console-logg
-   
-   # to optionally copy config
-   php artisan vendor:publish --provider="DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider"
-    ```
+   ```
+
+2. Enable logging channel `console-logg`
+
+`config/logging.php`
+```diff
+    'channels' => [
+        'stack' => [
+            'driver' => 'stack',
+-            'channels' => ['single'],
++            'channels' => ['console-logg', 'single'],
+            'ignore_exceptions' => false,
+        ],
+```
+
+[Laravel - Logging Docs](https://laravel.com/docs/8.x/logging#building-log-stacks)
 
 ### Compatibility
 
 | Compatible         | Laravel   | PHP       |
 |--------------------|-----------|-----------|
-| :heavy_check_mark: | 8.*       | PHP >=7.1 |
+| :heavy_check_mark: | 8.*       | PHP >=7.1 + 8.* |
 | :heavy_check_mark: | 7.*       | PHP >=7.1 |
 | :heavy_check_mark: | 6.*       | PHP >=7.1 |
-| :heavy_exclamation_mark: :soon: | > 5.6     | PHP >=7.1 |
-
-**PHP 8 compatibility is currently being tested**
-
-#### Compatibility assurance
-
-<details>
-  <summary>Click to find out how we ensure compatibility</summary>
-
-Compatibility is thoroughly tested using a combination of real world tests (functional), and unit tests
-
-[ConsoleLogg test suite](/test) is run in isolation
-
-- Using PHP 7.1, 7.2, 7.3,
-  7.4, [each major version of Laravel is independently tested against](actions?query=workflow%3A"PHPUnit+suite")
-- _Laravel 5.6, 5.7 & 5.8 are tested individually on top of this_
-
-Unit tests ensure type-compatibility, expected behaviour is met & compatibility with each version of Laravel contracts
-
-[TODO] Functional tests ensure real world expectations are through a real Laravel application
-
-</details>
 
 ---
+
 # Features
 
 ## Artisan serve supported
@@ -106,32 +97,13 @@ There are no traits, classes, interfaces that you need to use. ConsoleLogg does 
 
 The ConsoleLog Service Provider should be automatically added to your app, but if it hasn't, you can add it yourself to `config/app.php`
 ```php
-// generally only required when you have composer intalled with --no-scripts
+// generally only required when you have composer installed with --no-scripts
 
 'providers' => [
     //...
     \DevThis\ConsoleLogg\Providers\ConsoleLoggServiceProvider::class,
 ];
 ```
-
-## Settings
-
-See [config/console-logg.php](config/console-logg.php) for the raw configuration file
-
-### Filtering
-
-> default = `false`
-
-If you choose to enable filtering, logs will only be output to artisan console commands if they have the context property `logg` set to `true`
-
-eg.
-
-```php
-logger()->info("Informative message #1", ['logg' => true]);
-logger()->alert("Nice one");
-```
-
-With these logs being invoked by your artisan command, only `[info] Informative message #1` will be output
 
 ## Command-in-command
 
@@ -150,7 +122,7 @@ class MyConsoleApp extends Command
 
     public function handle(): int
     {
-        //other:command may invoke servies that use the Laravel Logger
+        //other:command may invoke services that use the Laravel Logger
         //these logs will still output to this current console
         $this->call('other:command');
         //...

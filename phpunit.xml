@@ -15,7 +15,9 @@
             <directory suffix=".phpt">test</directory>
         </testsuite>
     </testsuites>
-
+    <php>
+        <env name="LOG_CHANNEL" value="console-logg" force="true" />
+    </php>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>

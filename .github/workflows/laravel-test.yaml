@@ -12,12 +12,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ 7.2, 7.3, 7.4 ]
-        #laravel: [~5.6.0, ~5.7.0, ~5.8.0, ~5.9.0, ^6.0, ^7.0, ^8.0]
+        php: [ 7.2, 7.3, 7.4, 8.0 ]
         laravel: [ ^6.0, ^7.0, ^8.0 ]
         exclude:
           - php: 7.2
             laravel: ^8.0
+          - php: 8.0
+            laravel: ^6.0
+          - php: 8.0
+            laravel: ^7.0
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
@@ -48,11 +51,15 @@ jobs:
       - name: Add local path composer dependency
         run: |
           cd laravel-app
-          jq '.repositories[0].type="path"' composer.json > composer.temp.json
-          jq '.repositories[0].url="../console-logg-package"' composer.json > composer.temp.json
-          jq '.require."devthis/console-logg"="*"' composer.json > composer.temp.json
-          mv composer.temp.json composer.json
-          composer update --no-interaction --no-progress --ignore-platform-reqs
+          export PHPV=$(php -r "echo implode('.', [PHP_MAJOR_VERSION, PHP_MINOR_VERSION, PHP_RELEASE_VERSION]);")
+          cat <<< $(jq '.repositories[0].type="path"' composer.json) > composer.json
+          cat <<< $(jq '.repositories[0].url="../console-logg-package"' composer.json) > composer.json
+          cat <<< $(jq '.require."devthis/console-logg"="*"' composer.json) > composer.json
+          cat <<< $(jq '.require."psr/log"="1.1.4"' composer.json) > composer.json
+          cat <<< $(jq --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
+          cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
+          cat <<< $(jq '.require.php="^${{ matrix.php }}"' composer.json) > composer.json
+
 
       - name: Copy fixtures into Laravel app
         run: |
@@ -63,10 +70,20 @@ jobs:
       - name: Run Laravel package discovery
         run: |
           cd laravel-app
+          ls -lha
+          cat composer.json
+          composer update --no-interaction --no-progress
           php artisan package:discover --ansi
           php artisan clear-compiled
 
       - name: Run PHPT
+        if: matrix.php != '8.0'
         run: |
           cd console-logg-package
-          vendor/bin/phpunit tests/PhpTestCase/ --testdox
+          vendor/bin/phpunit tests/PhpTestCase/artisan-command-output.phpt --testdox
+
+      - name: Run PHPT
+        if: matrix.php == '8.0'
+        run: |
+          cd console-logg-package
+          vendor/bin/phpunit tests/PhpTestCase/artisan-command-output-php8.phpt --testdox

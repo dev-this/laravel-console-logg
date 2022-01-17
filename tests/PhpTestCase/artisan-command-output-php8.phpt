@@ -9,7 +9,6 @@ $_SERVER['argv'][2] = '-vvv';
 require __DIR__ . '/../../../laravel-app/artisan';
 
 --EXPECT--
-#!/usr/bin/env php
 [emergency] nice
 [info] and
 [alert] cool
