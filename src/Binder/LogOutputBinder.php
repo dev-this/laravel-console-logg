@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace DevThis\ConsoleLogg\Binder;
 
-use DevThis\ConsoleLogg\Console\ConsoleLogg;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
-use Illuminate\Contracts\Config\Repository;
+use DevThis\ConsoleLogg\LogHandlers\ConsoleApp;
 use Illuminate\Log\LogManager;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,7 +18,7 @@ class LogOutputBinder implements LogOutputBindedInterface
 {
     public function attach(OutputInterface $output, LogManager $logManager): void
     {
-        $consoleLogger = new ConsoleLogg($output);
+        $consoleLogger = new ConsoleApp($output);
 
         $logManager->extend(
             'console-logg',

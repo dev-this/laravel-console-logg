@@ -1,14 +1,14 @@
 <?php
-
 declare(strict_types=1);
 
-namespace DevThis\ConsoleLogg\Console;
+namespace DevThis\ConsoleLogg\LogHandlers;
 
 use Monolog\Handler\HandlerInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 
-class ConsoleLogg extends ConsoleLogger implements HandlerInterface
+class ConsoleApp extends ConsoleLogger implements HandlerInterface
 {
+    // Undocumented method required by Laravel LogManager
     public function getHandlers(): array
     {
         return [$this];
