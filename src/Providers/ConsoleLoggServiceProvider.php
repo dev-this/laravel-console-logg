@@ -9,6 +9,7 @@ use DevThis\ConsoleLogg\Binder\LogOutputBinder;
 use DevThis\ConsoleLogg\Interfaces\Binder\LogOutputBindedInterface;
 use DevThis\ConsoleLogg\Interfaces\Listener\LogManagerResolverListenerInterface;
 use DevThis\ConsoleLogg\Listeners\LogManagerResolverListener;
+use DevThis\ConsoleLogg\LogHandlers\NonConsole;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,16 +24,27 @@ class ConsoleLoggServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Support built-in PHP dev server or console kernel
-        if (PHP_SAPI !== 'cli-server' && $this->app->runningInConsole() === false) {
+        // TODO: Move this into documentation in a non-breaking fashion.
+        $this->app['config']['logging.channels.console-logg'] = ['driver' => 'console-logg'];
+
+        if ($this->app->runningInConsole() === false) {
+            $this->app->resolving(
+                LogManager::class,
+                static function (LogManager $logManager) {
+                    $logManager->extend(
+                        'console-logg',
+                        function () {
+                            return new NonConsole();
+                        }
+                    );
+                }
+            );
+
             return;
         }
 
         $this->app->singleton(LogOutputBindedInterface::class, LogOutputBinder::class);
         $this->app->singleton(LogManagerResolverListenerInterface::class, LogManagerResolverListener::class);
-
-        // sorry for this hack :(
-        $this->app['config']['logging.channels.console-logg'] = ['driver' => 'console-logg'];
 
         $this->app->resolving(
             LogManager::class,
