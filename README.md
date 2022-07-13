@@ -76,11 +76,12 @@ php artisan my:command -vvv
 
 ### Compatibility
 
-| Compatible         | Laravel   | PHP       |
-|--------------------|-----------|-----------|
-| :heavy_check_mark: | 8.*       | PHP >=7.1 + 8.* |
-| :heavy_check_mark: | 7.*       | PHP >=7.1 |
-| :heavy_check_mark: | 6.*       | PHP >=7.1 |
+| Compatible         | Laravel | 
+|--------------------|---------|
+| :heavy_check_mark: | 9.*     |
+| :heavy_check_mark: | 8.*     |
+| :heavy_check_mark: | 7.*     |
+| :heavy_check_mark: | 6.*     |
 
 ---
 
