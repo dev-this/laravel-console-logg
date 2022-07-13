@@ -20,6 +20,11 @@ class NonConsole extends NullLogger implements HandlerInterface {
         return false;
     }
 
+    public function getProcessors(): array
+    {
+        return [];
+    }
+
     public function handle(array $record): bool
     {
         return false;
