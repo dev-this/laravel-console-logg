@@ -12,15 +12,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ 7.2, 7.3, 7.4, 8.0 ]
-        laravel: [ ^6.0, ^7.0, ^8.0 ]
-        exclude:
+        include:
           - php: 7.2
-            laravel: ^8.0
-          - php: 8.0
             laravel: ^6.0
+          - php: 7.3
+            laravel: ^6.0
+          - php: 7.4
+            laravel: ^6.0
+          - php: 7.2
+            laravel: ^7.0
+          - php: 7.3
+            laravel: ^7.0
+          - php: 7.4
+            laravel: ^7.0
           - php: 8.0
             laravel: ^7.0
+          - php: 7.3
+            laravel: ^8.0
+          - php: 7.4
+            laravel: ^8.0
+          - php: 8.1
+            laravel: ^8.0
+          - php: 8.1
+            laravel: ^9.0
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
@@ -77,13 +91,6 @@ jobs:
           php artisan clear-compiled
 
       - name: Run PHPT
-        if: matrix.php != '8.0'
         run: |
           cd console-logg-package
-          vendor/bin/phpunit tests/PhpTestCase/artisan-command-output.phpt --testdox
-
-      - name: Run PHPT
-        if: matrix.php == '8.0'
-        run: |
-          cd console-logg-package
-          vendor/bin/phpunit tests/PhpTestCase/artisan-command-output-php8.phpt --testdox
+          vendor/bin/phpunit tests/PhpTestCase/ --testdox
