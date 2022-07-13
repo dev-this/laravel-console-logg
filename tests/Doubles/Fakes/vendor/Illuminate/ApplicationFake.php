@@ -242,7 +242,7 @@ class ApplicationFake extends ArrayObject implements Application
     {
     }
 
-    public function storagePath($path = '')
+    public function storagePath()
     {
     }
 
