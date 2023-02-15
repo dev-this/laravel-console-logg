@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=0);
+declare(strict_types=1);
 
 namespace DevThis\ConsoleLogg\LogHandlers;
 
