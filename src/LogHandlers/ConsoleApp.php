@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types=0);
 
 namespace DevThis\ConsoleLogg\LogHandlers;
 
@@ -19,19 +19,29 @@ class ConsoleApp extends ConsoleLogger implements HandlerInterface
         return [];
     }
 
-    public function isHandling(array $record): bool
+    /**
+     * @param array|Monolog\LogRecord $record
+     */
+    public function isHandling($record): bool
     {
         return true;
     }
 
-    public function handle(array $record): bool
+    /**
+     * @param array|Monolog\LogRecord $record
+     */
+    public function handle($record): bool
     {
-        $this->log(strtolower($record['level_name'] ?? ''), $record['message'] ?? '', $record['context'] ?? []);
+        $recordArray = is_array($record) ? $record : $record->toArray();
+        $this->log(strtolower($recordArray['level_name'] ?? ''), $recordArray['message'] ?? '', $recordArray['context'] ?? []);
 
         return true;
     }
 
-    public function handleBatch(array $records): void
+    /**
+     * @param array|Monolog\LogRecord $record
+     */
+    public function handleBatch($records): void
     {
         foreach ($records as $record) {
             $this->handle($record);
