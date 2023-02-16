@@ -89,7 +89,7 @@ jobs:
           cd laravel-app
           ls -lha
           cat composer.json
-          composer update --no-interaction --no-progress
+          composer update --no-interaction --no-progress --with-all-dependencies
           php artisan package:discover --ansi
           php artisan clear-compiled
 
