@@ -75,6 +75,7 @@ jobs:
           cat <<< $(jq --arg phpv "$PHPV" '.config.platform.php=$phpv' composer.json) > composer.json
           cat <<< $(jq '.extra.symfony.require="5.4"' composer.json) > composer.json
           cat <<< $(jq '.require.php="^${{ matrix.php }}"' composer.json) > composer.json
+          cat <<< $(jq '."minimum-stability"="dev"' composer.json) > composer.json
 
 
       - name: Copy fixtures into Laravel app
