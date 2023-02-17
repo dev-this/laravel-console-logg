@@ -35,6 +35,8 @@ jobs:
             laravel: ^8.0
           - php: 8.1
             laravel: ^9.0
+          - php: 8.2
+            laravel: ^10.0
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
@@ -87,7 +89,7 @@ jobs:
           cd laravel-app
           ls -lha
           cat composer.json
-          composer update --no-interaction --no-progress
+          composer update --no-interaction --no-progress --with-all-dependencies
           php artisan package:discover --ansi
           php artisan clear-compiled
 

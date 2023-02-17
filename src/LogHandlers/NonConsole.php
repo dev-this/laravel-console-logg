@@ -15,7 +15,10 @@ class NonConsole extends NullLogger implements HandlerInterface {
         return [];
     }
 
-    public function isHandling(array $record): bool
+    /**
+     * @param array|Monolog\LogRecord $record
+     */
+    public function isHandling($record): bool
     {
         return false;
     }
@@ -25,12 +28,18 @@ class NonConsole extends NullLogger implements HandlerInterface {
         return [];
     }
 
-    public function handle(array $record): bool
+    /**
+     * @param array|Monolog\LogRecord $record
+     */
+    public function handle($record): bool
     {
         return false;
     }
 
-    public function handleBatch(array $records): void
+    /**
+     * @param array|Monolog\LogRecord $record
+     */
+    public function handleBatch($records): void
     {
     }
 
